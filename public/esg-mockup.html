@@ -613,14 +613,272 @@
         }
 
         /* Implementation Timeline */
-        .implementation-header {
+        .implementation-header, .top-bar {
             background-color: #333333;
             color: white;
-            padding: 10px 20px;
+            padding: 15px 30px;
             margin: -30px -30px 20px -30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+
+        .goals-list {
+            margin-top: 20px;
+        }
+
+        .goal-item {
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background: white;
+        }
+
+        .goal-header {
+            padding: 15px 20px;
+            background: #F8F9FA;
+            border-bottom: 1px solid #E0E0E0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+        }
+
+        .goal-header .arrow {
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .goal-header.expanded .arrow {
+            transform: rotate(180deg);
+        }
+
+        .goal-content {
+            display: none;
+            padding: 0;
+        }
+
+        .goal-content.expanded {
+            display: block;
+        }
+
+        .initiative-item {
+            border-left: 3px solid #28A745;
+            margin: 15px 20px;
+            background: #F8F9FA;
+            border-radius: 5px;
+        }
+
+        .initiative-header {
+            padding: 15px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+        }
+
+        .initiative-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .initiative-desc {
+            font-size: 14px;
+            color: #6C757D;
+            margin: 5px 0;
+        }
+
+        .responsible {
+            font-size: 12px;
+            color: #6C757D;
+            margin: 5px 0;
+        }
+
+        .initiative-content {
+            display: none;
+            padding: 0 15px 15px 15px;
+        }
+
+        .initiative-content.expanded {
+            display: block;
+        }
+
+        .target-item {
+            margin: 10px 0;
+            border: 1px solid #DEE2E6;
+            border-radius: 5px;
+            background: white;
+        }
+
+        .target-header {
+            padding: 12px 15px;
+            background: #FFFFFF;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+        }
+
+        .target-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .target-details {
+            font-size: 12px;
+            color: #6C757D;
+            margin: 5px 0;
+        }
+
+        .target-content {
+            display: none;
+            padding: 15px;
+            border-top: 1px solid #DEE2E6;
+        }
+
+        .target-content.expanded {
+            display: block;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 15px;
+            border: 1px solid #DEE2E6;
+            border-radius: 5px;
+            margin: 8px 0;
+            background: white;
+            font-size: 14px;
+        }
+
+        .task-item span:first-child {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .action-buttons {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-sm {
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #28A745;
+            border-radius: 3px;
+            margin: 0 15px;
+            flex: 1;
+        }
+
+        /* Drawer styles */
+        .drawer {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            z-index: 1000;
+        }
+
+        .drawer.open {
+            right: 0;
+        }
+
+        .drawer-content {
+            padding: 20px;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .drawer-header h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .drawer-header .close {
+            font-size: 24px;
+            cursor: pointer;
+            color: #6C757D;
+        }
+
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        .drawer-overlay.active {
+            display: block;
+        }
+
+        /* Reporting sidebar styles */
+        .reporting-sidebar {
+            width: 250px;
+            background: #F8F9FA;
+            border-right: 1px solid #E0E0E0;
+            padding: 20px;
+            height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .reporting-sidebar h3 {
+            margin: 0 0 20px 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .sidebar-item {
+            padding: 12px 15px;
+            margin: 5px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #333;
+            background: white;
+            border: 1px solid #E0E0E0;
+        }
+
+        .sidebar-item:hover {
+            background: #E8F4FD;
+        }
+
+        .sidebar-item.active {
+            background: #28A745;
+            color: white;
+        }
+
+        .reporting-main {
+            flex: 1;
+            padding: 20px;
         }
 
         .last-updated {
@@ -1231,14 +1489,81 @@
 
         <!-- Implementation Page -->
         <div class="page" id="implementation">
-            <div class="implementation-header">
-                <h1 style="margin: 0; color: white; font-weight: 600;">ESG Implementation</h1>
-                <div class="last-updated">Last Updated: 10:35 PM IST, July 16, 2025</div>
+            <div class="flex">
+                <!-- Left Sidebar -->
+                <div id="implementation-sidebar" class="sidebar">
+                    <h3>ESG Categories</h3>
+                    <div class="sidebar-group">
+                        <div class="sidebar-category" onclick="toggleCategory('env-impl')">
+                            <span>Environmental</span>
+                            <span class="arrow">▼</span>
+                        </div>
+                        <div id="env-impl" class="subcategories">
+                            <div class="subcategory active" onclick="selectImplSubcategory('energy-impl', 'Environmental')">Energy</div>
+                            <div class="subcategory" onclick="selectImplSubcategory('water-impl', 'Environmental')">Water</div>
+                            <div class="subcategory" onclick="selectImplSubcategory('waste-impl', 'Environmental')">Waste</div>
+                            <div class="subcategory" onclick="selectImplSubcategory('biodiversity-impl', 'Environmental')">Biodiversity</div>
+                            <div class="subcategory" onclick="selectImplSubcategory('emissions-impl', 'Environmental')">Emissions</div>
+                        </div>
+                    </div>
+                    <div class="sidebar-group">
+                        <div class="sidebar-category" onclick="toggleCategory('social-impl')">
+                            <span>Social</span>
+                            <span class="arrow">▶</span>
+                        </div>
+                        <div id="social-impl" class="subcategories" style="display: none;">
+                            <div class="subcategory" onclick="selectImplSubcategory('health-impl', 'Social')">Health & Safety</div>
+                            <div class="subcategory" onclick="selectImplSubcategory('diversity-impl', 'Social')">Diversity</div>
+                            <div class="subcategory" onclick="selectImplSubcategory('training-impl', 'Social')">Training</div>
+                            <div class="subcategory" onclick="selectImplSubcategory('community-impl', 'Social')">Community Engagement</div>
+                        </div>
+                    </div>
+                    <div class="sidebar-group">
+                        <div class="sidebar-category" onclick="toggleCategory('governance-impl')">
+                            <span>Governance</span>
+                            <span class="arrow">▶</span>
+                        </div>
+                        <div id="governance-impl" class="subcategories" style="display: none;">
+                            <div class="subcategory" onclick="selectImplSubcategory('board-impl', 'Governance')">Board Composition</div>
+                            <div class="subcategory" onclick="selectImplSubcategory('ethics-impl', 'Governance')">Ethics</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="main-content">
+                    <div class="top-bar">
+                        <span style="color: white;">Last Updated: 09:58 PM IST, July 17, 2025</span>
+                    </div>
+                    <h2>Implementation</h2>
+                    <p>Track and manage your ESG goals</p>
+                    
+                    <div class="content-section">
+                        <h3>Goals Overview</h3>
+                        <div class="goals-list" id="goalsListContent">
+                            <!-- Goals will be dynamically populated based on selected category -->
+                        </div>
+                    </div>
+                    
+                    <div class="page-navigation">
+                        <button class="btn btn-secondary" onclick="showPage('goals')">← Back to Goal Setting</button>
+                        <button class="btn btn-primary" onclick="showPage('reporting')">Proceed to Reporting →</button>
+                    </div>
+                </div>
             </div>
 
-            <div id="implementationContent">
-                <!-- Dynamic content populated by JavaScript -->
+            <!-- Add Drawer -->
+            <div id="addDrawer" class="drawer">
+                <div class="drawer-content">
+                    <div class="drawer-header">
+                        <h3 id="drawerTitle">Add Item</h3>
+                        <span class="close" onclick="closeAddDrawer()">&times;</span>
+                    </div>
+                    <div id="drawerFields"></div>
+                    <button type="button" class="btn btn-primary" onclick="saveDrawerItem()">Save</button>
+                </div>
             </div>
+            <div id="drawerOverlay" class="drawer-overlay" onclick="closeAddDrawer()"></div>
         </div>
 
         <!-- Monitoring Page -->
@@ -1334,13 +1659,26 @@
             <h1 style="margin-bottom: 30px; color: #333333; font-weight: 600;">ESG Reporting</h1>
             
             <div class="nav-tabs" style="position: relative; background-color: white; box-shadow: none; margin-bottom: 20px; border-bottom: 1px solid #DEE2E6;">
-                <button class="nav-tab active" data-standard="brsr">BRSR</button>
-                <button class="nav-tab" data-standard="gri">GRI</button>
-                <button class="nav-tab" data-standard="ifrs">IFRS</button>
+                <button class="nav-tab active" data-standard="brsr" onclick="switchReportingTab('brsr')">BRSR</button>
+                <button class="nav-tab" data-standard="gri" onclick="switchReportingTab('gri')">GRI</button>
+                <button class="nav-tab" data-standard="ifrs" onclick="switchReportingTab('ifrs')">IFRS</button>
             </div>
 
-            <div id="reportingContent">
-                <!-- Dynamic content populated by JavaScript -->
+            <div class="flex">
+                <!-- Reporting Sidebar -->
+                <div id="reporting-sidebar" class="reporting-sidebar">
+                    <h3 id="sidebar-title">BRSR Standards</h3>
+                    <div id="sidebar-content">
+                        <!-- Dynamic sidebar content -->
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="reporting-main">
+                    <div id="reportingContent">
+                        <!-- Dynamic content populated by JavaScript -->
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1925,206 +2263,386 @@
             updateGoalsList();
         }
 
-        function updateImplementationContent() {
-            const container = document.getElementById('implementationContent');
+        // Implementation page data and functions
+        let currentImplCategory = 'Environmental';
+        let currentImplSubcategory = 'Energy';
+
+        const implementationGoals = {
+            Environmental: {
+                Energy: [
+                    {
+                        id: 'increase-renewables',
+                        name: 'Increase use of renewables',
+                        progress: 65,
+                        initiatives: [
+                            {
+                                id: 'led-lighting',
+                                name: 'LED Lighting Initiative',
+                                description: 'Replace all fluorescent lighting with LED systems across all facilities',
+                                responsible: 'Facilities Team',
+                                collaborators: 'Sustainability Team, Procurement',
+                                status: 'In Progress',
+                                targets: [
+                                    {
+                                        id: 'led-target-1',
+                                        name: '80% LED conversion by 2025 over 2024 baseline',
+                                        tracking: 'Monthly',
+                                        standards: 'ISO 14001',
+                                        tasks: [
+                                            { name: 'Audit current lighting systems', status: 'Completed', assignedTo: 'Energy Team', dueDate: '2025-08-15' },
+                                            { name: 'Install LED lighting in Building A', status: 'In Progress', assignedTo: 'Facilities Team', dueDate: '2025-09-30' },
+                                            { name: 'Develop lighting standards', status: 'Not Started', assignedTo: 'Engineering Team', dueDate: '2025-08-30' }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                id: 'solar-panels',
+                                name: 'Solar Panel Installation',
+                                description: 'Install rooftop solar panels on main facilities',
+                                responsible: 'Engineering Team',
+                                collaborators: 'Finance Team, Regulatory Affairs',
+                                status: 'Planning',
+                                targets: [
+                                    {
+                                        id: 'solar-target-1',
+                                        name: '50% renewable energy by 2027 over 2024 baseline',
+                                        tracking: 'Quarterly',
+                                        standards: 'TCFD',
+                                        tasks: [
+                                            { name: 'Complete solar feasibility study', status: 'In Progress', assignedTo: 'Engineering Team', dueDate: '2025-08-31' },
+                                            { name: 'Obtain solar installation permits', status: 'Not Started', assignedTo: 'Regulatory Team', dueDate: '2025-10-15' }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                Water: [
+                    {
+                        id: 'water-conservation',
+                        name: 'Water Conservation Program',
+                        progress: 45,
+                        initiatives: [
+                            {
+                                id: 'water-efficiency',
+                                name: 'Water Efficiency Initiative',
+                                description: 'Implement water-saving technologies across facilities',
+                                responsible: 'Facilities Team',
+                                collaborators: 'Engineering Team',
+                                status: 'Planning',
+                                targets: []
+                            }
+                        ]
+                    }
+                ]
+            },
+            Social: {
+                'Health & Safety': [
+                    {
+                        id: 'safety-program',
+                        name: 'Enhanced Safety Program',
+                        progress: 70,
+                        initiatives: [
+                            {
+                                id: 'safety-training',
+                                name: 'Safety Training Initiative',
+                                description: 'Comprehensive safety training for all employees',
+                                responsible: 'HR Team',
+                                collaborators: 'Safety Team',
+                                status: 'In Progress',
+                                targets: []
+                            }
+                        ]
+                    }
+                ]
+            },
+            Governance: {
+                Ethics: [
+                    {
+                        id: 'ethics-program',
+                        name: 'Ethics and Compliance Program',
+                        progress: 55,
+                        initiatives: [
+                            {
+                                id: 'ethics-training',
+                                name: 'Ethics Training Initiative',
+                                description: 'Regular ethics training for all employees',
+                                responsible: 'Legal Team',
+                                collaborators: 'HR Team',
+                                status: 'Planning',
+                                targets: []
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        function selectImplSubcategory(subcategoryId, category) {
+            currentImplCategory = category;
+            currentImplSubcategory = subcategoryId.replace('-impl', '').replace(/^\w/, c => c.toUpperCase());
             
-            // Sample implementation data
-            const implementationData = {
-                environmental: {
-                    goals: [
-                        {
-                            id: 'reduce-energy',
-                            name: 'Reduce Energy Consumption',
-                            initiatives: [
-                                {
-                                    name: 'Energy Audit',
-                                    targets: [
-                                        {
-                                            name: '80% Renewable Energy',
-                                            tasks: [
-                                                { name: 'Conduct Energy Audit', assignedTo: 'John Doe', dueDate: '2025-02-15', status: 'In Progress' },
-                                                { name: 'Install Solar Panels', assignedTo: 'Jane Smith', dueDate: '2025-03-30', status: 'Pending' }
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            id: 'minimize-waste',
-                            name: 'Minimize Waste Generation',
-                            initiatives: [
-                                {
-                                    name: 'Waste Reduction Program',
-                                    targets: [
-                                        {
-                                            name: '50% Waste Reduction',
-                                            tasks: [
-                                                { name: 'Implement Recycling Program', assignedTo: 'Bob Johnson', dueDate: '2025-02-28', status: 'Completed' }
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                social: {
-                    goals: [
-                        {
-                            id: 'employee-wellness',
-                            name: 'Employee Wellness Program',
-                            initiatives: [
-                                {
-                                    name: 'Health & Wellness Initiative',
-                                    targets: [
-                                        {
-                                            name: 'Improve Employee Satisfaction',
-                                            tasks: [
-                                                { name: 'Conduct Wellness Survey', assignedTo: 'HR Team', dueDate: '2025-01-31', status: 'In Progress' }
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                governance: {
-                    goals: [
-                        {
-                            id: 'board-governance',
-                            name: 'Strengthen Board Governance',
-                            initiatives: [
-                                {
-                                    name: 'Governance Review',
-                                    targets: [
-                                        {
-                                            name: 'Board Diversity Target',
-                                            tasks: [
-                                                { name: 'Review Board Composition', assignedTo: 'Legal Team', dueDate: '2025-03-15', status: 'Pending' }
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            };
+            // Update sidebar active states
+            document.querySelectorAll('#implementation-sidebar .subcategory').forEach(el => el.classList.remove('active'));
+            document.querySelector(`[onclick="selectImplSubcategory('${subcategoryId}', '${category}')"]`).classList.add('active');
+            
+            updateImplementationContent();
+        }
+
+        function updateImplementationContent() {
+            const container = document.getElementById('goalsListContent');
+            const goals = implementationGoals[currentImplCategory]?.[currentImplSubcategory] || [];
             
             container.innerHTML = '';
             
-            Object.keys(implementationData).forEach(category => {
-                const categoryDiv = document.createElement('div');
-                categoryDiv.className = 'card mb-20';
-                
-                let categoryContent = `
-                    <div class="card-header">
-                        <div class="card-title">
-                            <span class="material-icons" style="margin-right: 10px; vertical-align: middle;">
-                                ${category === 'environmental' ? 'eco' : category === 'social' ? 'people' : 'account_balance'}
-                            </span>
-                            ${category.charAt(0).toUpperCase() + category.slice(1)} Goals
-                        </div>
+            goals.forEach(goal => {
+                const goalDiv = document.createElement('div');
+                goalDiv.className = 'goal-item';
+                goalDiv.innerHTML = `
+                    <div class="goal-header" onclick="toggleGoal('goal-${goal.id}')">
+                        <span class="arrow">▼</span>
+                        <span>${goal.name}</span>
+                        <div class="progress-bar" style="width: ${goal.progress}%; background: #28A745;"></div>
+                        <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); openAddDrawer('initiative')">+ Add Initiative</button>
                     </div>
-                `;
-                
-                implementationData[category].goals.forEach(goal => {
-                    categoryContent += `
-                        <div class="expandable" data-goal-id="${goal.id}">
-                            <div class="expandable-header" onclick="toggleExpandable(this)">
-                                <span style="font-weight: 600;">${goal.name}</span>
-                                <span class="material-icons">expand_more</span>
-                            </div>
-                            <div class="expandable-content">
-                                <div class="expandable-content-inner">
-                    `;
-                    
-                    goal.initiatives.forEach(initiative => {
-                        categoryContent += `
-                            <div class="expandable" style="margin-left: 20px;">
-                                <div class="expandable-header" onclick="toggleExpandable(this)">
-                                    <span>Initiative: ${initiative.name}</span>
-                                    <span class="material-icons">expand_more</span>
-                                </div>
-                                <div class="expandable-content">
-                                    <div class="expandable-content-inner">
-                        `;
-                        
-                        initiative.targets.forEach(target => {
-                            categoryContent += `
-                                <div class="expandable" style="margin-left: 20px;">
-                                    <div class="expandable-header" onclick="toggleExpandable(this)">
-                                        <span>Target: ${target.name}</span>
-                                        <span class="material-icons">expand_more</span>
+                    <div id="goal-${goal.id}" class="goal-content">
+                        ${goal.initiatives.map(initiative => `
+                            <div class="initiative-item">
+                                <div class="initiative-header" onclick="toggleInitiative('init-${initiative.id}')">
+                                    <div class="initiative-title">
+                                        <span class="arrow">▼</span>
+                                        <span>${initiative.name}</span>
+                                        <span class="status-badge ${initiative.status.toLowerCase().replace(' ', '-')}">${initiative.status}</span>
                                     </div>
-                                    <div class="expandable-content">
-                                        <div class="expandable-content-inner">
-                                            <div class="table-container">
-                                                <table class="table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Task</th>
-                                                            <th>Assigned To</th>
-                                                            <th>Due Date</th>
-                                                            <th>Status</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                            `;
-                            
-                            target.tasks.forEach(task => {
-                                const statusClass = task.status === 'Completed' ? 'badge-completed' :
-                                                   task.status === 'In Progress' ? 'badge-in-progress' : 'badge-pending';
-                                
-                                categoryContent += `
-                                    <tr>
-                                        <td>${task.name}</td>
-                                        <td>${task.assignedTo}</td>
-                                        <td>${task.dueDate}</td>
-                                        <td><span class="badge ${statusClass}">${task.status}</span></td>
-                                    </tr>
-                                `;
-                            });
-                            
-                            categoryContent += `
-                                                    </tbody>
-                                                </table>
+                                    <p class="initiative-desc">${initiative.description}</p>
+                                    <p class="responsible">Responsible: ${initiative.responsible} | Collaborators: ${initiative.collaborators}</p>
+                                </div>
+                                <div id="init-${initiative.id}" class="initiative-content">
+                                    ${initiative.targets.map(target => `
+                                        <div class="target-item">
+                                            <div class="target-header" onclick="toggleTarget('target-${target.id}')">
+                                                <div class="target-title">
+                                                    <span class="arrow">▼</span>
+                                                    <span>${target.name}</span>
+                                                </div>
+                                                <p class="target-details">Tracking: ${target.tracking} | Standards: ${target.standards}</p>
+                                            </div>
+                                            <div id="target-${target.id}" class="target-content">
+                                                ${target.tasks.map(task => `
+                                                    <div class="task-item">
+                                                        <span>${task.name}</span>
+                                                        <span class="status-badge ${task.status.toLowerCase().replace(' ', '-')}">${task.status}</span>
+                                                        <span>Assigned: ${task.assignedTo} | Due: ${task.dueDate}</span>
+                                                    </div>
+                                                `).join('')}
+                                                <div class="action-buttons">
+                                                    <button class="btn btn-primary btn-sm" onclick="openAddDrawer('target')">+ Add Target</button>
+                                                    <button class="btn btn-primary btn-sm" onclick="openAddDrawer('task')">+ Add Task</button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            `;
-                        });
-                        
-                        categoryContent += `
-                                    </div>
+                                    `).join('')}
                                 </div>
                             </div>
-                        `;
-                    });
-                    
-                    categoryContent += `
-                                </div>
-                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(goalDiv);
+            });
+        }
+
+        function toggleGoal(goalId) {
+            const content = document.getElementById(goalId);
+            const arrow = content.previousElementSibling.querySelector('.arrow');
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                arrow.textContent = '▼';
+            } else {
+                content.classList.add('expanded');
+                arrow.textContent = '▲';
+            }
+        }
+
+        function toggleInitiative(initId) {
+            const content = document.getElementById(initId);
+            const arrow = content.previousElementSibling.querySelector('.arrow');
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                arrow.textContent = '▼';
+            } else {
+                content.classList.add('expanded');
+                arrow.textContent = '▲';
+            }
+        }
+
+        function toggleTarget(targetId) {
+            const content = document.getElementById(targetId);
+            const arrow = content.previousElementSibling.querySelector('.arrow');
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                arrow.textContent = '▼';
+            } else {
+                content.classList.add('expanded');
+                arrow.textContent = '▲';
+            }
+        }
+
+        function openAddDrawer(type) {
+            const drawer = document.getElementById('addDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+            const title = document.getElementById('drawerTitle');
+            const fields = document.getElementById('drawerFields');
+            
+            title.textContent = `Add ${type.charAt(0).toUpperCase() + type.slice(1)}`;
+            
+            let fieldsHtml = '';
+            
+            switch(type) {
+                case 'initiative':
+                    fieldsHtml = `
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" id="initiative-name" placeholder="Enter initiative name">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="initiative-desc" rows="3" placeholder="Enter description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select id="initiative-status">
+                                <option value="">Select status</option>
+                                <option value="Planning">Planning</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Responsible Entity</label>
+                            <input type="text" id="initiative-responsible" placeholder="Enter responsible entity">
+                        </div>
+                        <div class="form-group">
+                            <label>Approved By</label>
+                            <input type="text" id="initiative-approver" placeholder="Enter approver">
                         </div>
                     `;
-                });
-                
-                categoryDiv.innerHTML = categoryContent;
-                container.appendChild(categoryDiv);
-            });
+                    break;
+                case 'target':
+                    fieldsHtml = `
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" id="target-name" placeholder="Enter target name">
+                        </div>
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select id="target-category">
+                                <option value="">Select category</option>
+                                <option value="Environmental">Environmental</option>
+                                <option value="Social">Social</option>
+                                <option value="Governance">Governance</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Level</label>
+                            <select id="target-level">
+                                <option value="">Select level</option>
+                                <option value="Organization">Organization</option>
+                                <option value="Department">Department</option>
+                                <option value="Project">Project</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Tracking</label>
+                            <select id="target-tracking">
+                                <option value="">Select tracking frequency</option>
+                                <option value="Monthly">Monthly</option>
+                                <option value="Quarterly">Quarterly</option>
+                                <option value="Annually">Annually</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Target Value</label>
+                            <input type="text" id="target-value" placeholder="Enter target value">
+                        </div>
+                        <div class="form-group">
+                            <label>Target Year</label>
+                            <input type="number" id="target-year" min="2025" max="2050" placeholder="Select year">
+                        </div>
+                        <div class="form-group">
+                            <label>Standards</label>
+                            <select id="target-standards">
+                                <option value="">Select standards</option>
+                                <option value="ISO 14001">ISO 14001</option>
+                                <option value="GRI">GRI</option>
+                                <option value="TCFD">TCFD</option>
+                            </select>
+                        </div>
+                    `;
+                    break;
+                case 'task':
+                    fieldsHtml = `
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" id="task-name" placeholder="Enter task name">
+                        </div>
+                        <div class="form-group">
+                            <label>Assigned To</label>
+                            <input type="text" id="task-assigned" placeholder="Enter assignee">
+                        </div>
+                        <div class="form-group">
+                            <label>Due Date</label>
+                            <input type="date" id="task-date">
+                        </div>
+                        <div class="form-group">
+                            <label>Recurring Frequency</label>
+                            <select id="task-frequency">
+                                <option value="">Select frequency</option>
+                                <option value="None">None</option>
+                                <option value="Daily">Daily</option>
+                                <option value="Weekly">Weekly</option>
+                                <option value="Monthly">Monthly</option>
+                                <option value="Quarterly">Quarterly</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select id="task-status">
+                                <option value="">Select status</option>
+                                <option value="Not Started">Not Started</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Approved By</label>
+                            <input type="text" id="task-approver" placeholder="Enter approver">
+                        </div>
+                    `;
+                    break;
+            }
             
-            // Add management buttons
-            const managementDiv = document.createElement('div');
-            managementDiv.className = 'flex gap-10 mt-20';
-            managementDiv.innerHTML = `
-                <button class="btn btn-primary" onclick="openSlideDrawer('add-initiative')">Add Initiative</button>
-                <button class="btn btn-primary" onclick="openSlideDrawer('add-target')">Add Target</button>
-                <button class="btn btn-primary" onclick="openSlideDrawer('add-task')">Add Task</button>
-            `;
-            container.appendChild(managementDiv);
+            fields.innerHTML = fieldsHtml;
+            overlay.classList.add('active');
+            drawer.classList.add('open');
+        }
+
+        function closeAddDrawer() {
+            const drawer = document.getElementById('addDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+            
+            overlay.classList.remove('active');
+            drawer.classList.remove('open');
+        }
+
+        function saveDrawerItem() {
+            // In a real app, this would save to backend
+            alert('Item saved successfully!');
+            closeAddDrawer();
         }
 
         function initializeCharts() {
@@ -2264,6 +2782,83 @@
         function updateMonitoringCharts(category) {
             // This would update charts based on selected category
             console.log('Updating monitoring charts for category:', category);
+        }
+
+        // Reporting functionality
+        let currentReportingStandard = 'brsr';
+        
+        const reportingStandards = {
+            brsr: {
+                title: 'BRSR Standards',
+                sections: [
+                    { id: 'general', name: 'General Disclosures' },
+                    { id: 'principle1', name: 'Principle 1: Ethics' },
+                    { id: 'principle2', name: 'Principle 2: Goods & Services' },
+                    { id: 'principle3', name: 'Principle 3: Employee Wellbeing' },
+                    { id: 'principle4', name: 'Principle 4: Stakeholder Engagement' },
+                    { id: 'principle5', name: 'Principle 5: Human Rights' },
+                    { id: 'principle6', name: 'Principle 6: Environment' },
+                    { id: 'principle7', name: 'Principle 7: Policy Advocacy' },
+                    { id: 'principle8', name: 'Principle 8: Inclusive Growth' },
+                    { id: 'principle9', name: 'Principle 9: Customer Value' }
+                ]
+            },
+            gri: {
+                title: 'GRI Standards',
+                sections: [
+                    { id: 'general', name: 'General Disclosures' },
+                    { id: 'gri301', name: 'GRI 301: Materials' },
+                    { id: 'gri302', name: 'GRI 302: Energy' },
+                    { id: 'gri303', name: 'GRI 303: Water' },
+                    { id: 'gri305', name: 'GRI 305: Emissions' }
+                ]
+            },
+            ifrs: {
+                title: 'IFRS Standards',
+                sections: [
+                    { id: 'general', name: 'General Disclosures' },
+                    { id: 'ifrs1', name: 'IFRS S1: Sustainability' },
+                    { id: 'ifrs2', name: 'IFRS S2: Climate' }
+                ]
+            }
+        };
+
+        function switchReportingTab(standard) {
+            currentReportingStandard = standard;
+            
+            // Update tab states
+            document.querySelectorAll('.nav-tab[data-standard]').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.dataset.standard === standard) {
+                    tab.classList.add('active');
+                }
+            });
+            
+            updateReportingSidebar();
+            updateReportingContent('general');
+        }
+
+        function updateReportingSidebar() {
+            const sidebar = document.getElementById('sidebar-content');
+            const title = document.getElementById('sidebar-title');
+            const standardData = reportingStandards[currentReportingStandard];
+            
+            title.textContent = standardData.title;
+            
+            sidebar.innerHTML = standardData.sections.map(section => 
+                `<div class="sidebar-item ${section.id === 'general' ? 'active' : ''}" 
+                      onclick="selectReportingSection('${section.id}')">
+                    ${section.name}
+                </div>`
+            ).join('');
+        }
+
+        function selectReportingSection(sectionId) {
+            // Update sidebar active states
+            document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            updateReportingContent(sectionId);
         }
 
         function updateReportingContent(section) {

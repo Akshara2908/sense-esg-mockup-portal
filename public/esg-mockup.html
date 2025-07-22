@@ -1,0 +1,2621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESG Management Portal - Helix Sense</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', 'Open Sans', sans-serif;
+            background-color: #F5F5F5;
+            color: #333333;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .navbar {
+            background-color: #E0E0E0;
+            padding: 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 60px;
+        }
+
+        .nav-header {
+            background-color: #28A745;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 50px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background-color: #E0E0E0;
+            height: 50px;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            padding: 15px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: #6C757D;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-tab:hover {
+            background-color: #DEE2E6;
+        }
+
+        .nav-tab.active {
+            background-color: #28A745;
+            color: white;
+            border-bottom-color: #1E7E34;
+        }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6C757D;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: -250px;
+            top: 60px;
+            width: 250px;
+            height: calc(100vh - 60px);
+            background-color: #E0E0E0;
+            transition: left 0.3s ease;
+            z-index: 999;
+            overflow-y: auto;
+            border-right: 1px solid #DEE2E6;
+        }
+
+        .sidebar.show {
+            left: 0;
+        }
+
+        .sidebar-trigger {
+            position: fixed;
+            top: 70px;
+            left: 10px;
+            background-color: #28A745;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .sidebar-content {
+            padding: 20px;
+        }
+
+        .sidebar-category {
+            margin-bottom: 15px;
+        }
+
+        .sidebar-category-title {
+            font-weight: 600;
+            color: #333333;
+            padding: 10px 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar-category-title:hover {
+            color: #28A745;
+        }
+
+        .sidebar-subcategories {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .sidebar-subcategories.expanded {
+            max-height: 300px;
+        }
+
+        .sidebar-subcategory {
+            padding: 8px 0 8px 20px;
+            cursor: pointer;
+            color: #6C757D;
+            transition: color 0.3s ease;
+        }
+
+        .sidebar-subcategory:hover,
+        .sidebar-subcategory.active {
+            color: #28A745;
+            font-weight: 500;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 60px;
+            padding: 30px;
+            min-height: calc(100vh - 60px);
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content.with-sidebar {
+            margin-left: 250px;
+        }
+
+        /* Page Containers */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Login Page */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #F5F5F5;
+        }
+
+        .login-form {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-form h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333333;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333333;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #DEE2E6;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #28A745;
+            box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: #28A745;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1E7E34;
+        }
+
+        .btn-secondary {
+            background-color: #DEE2E6;
+            color: #333333;
+        }
+
+        .btn-secondary:hover {
+            background-color: #CED4DA;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .hint {
+            text-align: center;
+            margin-top: 15px;
+            color: #6C757D;
+            font-size: 12px;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            border-bottom: 1px solid #DEE2E6;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333333;
+            margin-bottom: 5px;
+        }
+
+        .card-subtitle {
+            font-size: 14px;
+            color: #6C757D;
+        }
+
+        /* Progress Bars */
+        .progress {
+            background-color: #DEE2E6;
+            border-radius: 10px;
+            height: 8px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: #28A745;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-bar.warning {
+            background-color: #FFC107;
+        }
+
+        .progress-bar.danger {
+            background-color: #DC3545;
+        }
+
+        /* Grid Layouts */
+        .grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        .grid-4 {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+
+        /* Tables */
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #DEE2E6;
+        }
+
+        .table th {
+            background-color: #F8F9FA;
+            font-weight: 600;
+            color: #333333;
+        }
+
+        .table tr:hover {
+            background-color: #F8F9FA;
+        }
+
+        /* Badges */
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .badge-mandatory {
+            background-color: #DC3545;
+            color: white;
+        }
+
+        .badge-voluntary {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        .badge-completed {
+            background-color: #28A745;
+            color: white;
+        }
+
+        .badge-in-progress {
+            background-color: #FFC107;
+            color: #333333;
+        }
+
+        .badge-pending {
+            background-color: #6C757D;
+            color: white;
+        }
+
+        /* Expandable Sections */
+        .expandable {
+            border: 1px solid #DEE2E6;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .expandable-header {
+            padding: 15px;
+            background-color: #F8F9FA;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .expandable-header:hover {
+            background-color: #E9ECEF;
+        }
+
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background-color: white;
+        }
+
+        .expandable-content.expanded {
+            max-height: 1000px;
+        }
+
+        .expandable-content-inner {
+            padding: 15px;
+        }
+
+        /* Slide Drawer */
+        .slide-drawer {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            z-index: 1002;
+            overflow-y: auto;
+        }
+
+        .slide-drawer.open {
+            right: 0;
+        }
+
+        .slide-drawer-header {
+            padding: 20px;
+            border-bottom: 1px solid #DEE2E6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .slide-drawer-content {
+            padding: 20px;
+        }
+
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .drawer-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Charts */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+
+        /* Planning Steps */
+        .planning-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+
+        .planning-step {
+            flex: 1;
+            text-align: center;
+            padding: 20px 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            margin: 0 5px;
+        }
+
+        .planning-step:hover {
+            background-color: #F8F9FA;
+        }
+
+        .planning-step.completed {
+            background-color: #D4EDD6;
+            color: #155724;
+        }
+
+        .planning-step.in-progress {
+            background-color: #FFF3CD;
+            color: #856404;
+        }
+
+        .planning-step.pending {
+            background-color: #F8F9FA;
+            color: #6C757D;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #28A745;
+            color: white;
+            line-height: 30px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .step-status {
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333333;
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 12px;
+        }
+
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333333 transparent transparent transparent;
+        }
+
+        /* Implementation Timeline */
+        .implementation-header {
+            background-color: #333333;
+            color: white;
+            padding: 10px 20px;
+            margin: -30px -30px 20px -30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .last-updated {
+            font-size: 12px;
+            color: #CED4DA;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+
+            .nav-tabs {
+                display: none;
+            }
+
+            .nav-tabs.mobile-show {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: #E0E0E0;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+
+            .main-content {
+                padding: 15px;
+            }
+
+            .main-content.with-sidebar {
+                margin-left: 0;
+            }
+
+            .sidebar {
+                width: 100%;
+                left: -100%;
+            }
+
+            .grid-2,
+            .grid-3,
+            .grid-4 {
+                grid-template-columns: 1fr;
+            }
+
+            .planning-steps {
+                flex-direction: column;
+            }
+
+            .planning-step {
+                margin: 5px 0;
+            }
+
+            .slide-drawer {
+                width: 100%;
+                right: -100%;
+            }
+        }
+
+        /* Utilities */
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .text-right { text-align: right; }
+        .mt-10 { margin-top: 10px; }
+        .mt-20 { margin-top: 20px; }
+        .mb-10 { margin-bottom: 10px; }
+        .mb-20 { margin-bottom: 20px; }
+        .p-10 { padding: 10px; }
+        .p-20 { padding: 20px; }
+        .hidden { display: none; }
+        .flex { display: flex; }
+        .justify-between { justify-content: space-between; }
+        .align-center { align-items: center; }
+        .gap-10 { gap: 10px; }
+        .gap-20 { gap: 20px; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar" style="display: none;">
+        <div class="nav-header">
+            <div class="flex align-center gap-10">
+                <span class="material-icons">eco</span>
+                <span style="font-weight: 600;">Helix Sense ESG Portal</span>
+            </div>
+            <div class="flex align-center gap-20">
+                <span style="font-size: 14px;">Welcome, Admin</span>
+                <span class="material-icons" style="cursor: pointer;">account_circle</span>
+            </div>
+        </div>
+        <div class="nav-tabs" id="navTabs">
+            <button class="nav-tab active" data-page="home">
+                <span class="material-icons" style="font-size: 18px; margin-right: 5px;">home</span>
+                Home
+            </button>
+            <button class="nav-tab" data-page="planning">
+                <span class="material-icons" style="font-size: 18px; margin-right: 5px;">timeline</span>
+                Planning
+            </button>
+            <button class="nav-tab" data-page="implementation">
+                <span class="material-icons" style="font-size: 18px; margin-right: 5px;">build</span>
+                Implementation
+            </button>
+            <button class="nav-tab" data-page="monitoring">
+                <span class="material-icons" style="font-size: 18px; margin-right: 5px;">bar_chart</span>
+                Monitoring
+            </button>
+            <button class="nav-tab" data-page="reporting">
+                <span class="material-icons" style="font-size: 18px; margin-right: 5px;">description</span>
+                Reporting
+            </button>
+            <button class="nav-tab" data-page="esg-ai">
+                <span class="material-icons" style="font-size: 18px; margin-right: 5px;">psychology</span>
+                ESG AI
+            </button>
+        </div>
+        <button class="hamburger" id="hamburger">
+            <span class="material-icons">menu</span>
+        </button>
+    </nav>
+
+    <!-- Sidebar Trigger -->
+    <button class="sidebar-trigger" id="sidebarTrigger" style="display: none;">
+        <span class="material-icons">settings</span>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-content" id="sidebarContent">
+            <!-- Dynamic content based on current page -->
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        
+        <!-- Login Page -->
+        <div class="page active" id="login">
+            <div class="login-container">
+                <form class="login-form" id="loginForm">
+                    <h2>ESG Portal Login</h2>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">Login</button>
+                    <div class="hint">Hint: Use admin / password123</div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Organization Details Page -->
+        <div class="page" id="organization">
+            <div class="login-container">
+                <form class="login-form" id="orgForm" style="max-width: 500px;">
+                    <h2>Organization Details</h2>
+                    <div class="form-group">
+                        <label for="orgName">Organization Name</label>
+                        <input type="text" id="orgName" name="orgName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <select id="location" name="location" required>
+                            <option value="">Select Country</option>
+                            <option value="IN">India</option>
+                            <option value="US">United States</option>
+                            <option value="UK">United Kingdom</option>
+                            <option value="DE">Germany</option>
+                            <option value="FR">France</option>
+                            <option value="JP">Japan</option>
+                            <option value="CN">China</option>
+                            <option value="AU">Australia</option>
+                            <option value="CA">Canada</option>
+                            <option value="BR">Brazil</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="employees">Number of Employees</label>
+                        <input type="number" id="employees" name="employees" min="1" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">Submit</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Home Page -->
+        <div class="page" id="home">
+            <h1 style="margin-bottom: 30px; color: #333333; font-weight: 600;">ESG Dashboard</h1>
+            
+            <!-- Key Metrics -->
+            <div class="grid grid-4 mb-20">
+                <div class="card text-center">
+                    <div class="card-title" style="color: #28A745; font-size: 24px;">12</div>
+                    <div class="card-subtitle">Active Goals</div>
+                </div>
+                <div class="card text-center">
+                    <div class="card-title" style="color: #FFC107; font-size: 24px;">67%</div>
+                    <div class="card-subtitle">Average Progress</div>
+                </div>
+                <div class="card text-center">
+                    <div class="card-title" style="color: #007BFF; font-size: 24px;">8</div>
+                    <div class="card-subtitle">Active Initiatives</div>
+                </div>
+                <div class="card text-center">
+                    <div class="card-title" style="color: #DC3545; font-size: 24px;">3</div>
+                    <div class="card-subtitle">Behind Schedule</div>
+                </div>
+            </div>
+
+            <!-- Goals Overview -->
+            <div class="grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Environmental Goals</div>
+                    </div>
+                    <div class="goal-item" data-goal="reduce-energy">
+                        <div class="flex justify-between align-center mb-10">
+                            <span style="color: #28A745; cursor: pointer; text-decoration: underline;">Reduce Energy Consumption</span>
+                            <span style="font-weight: 600;">75%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 75%;"></div>
+                        </div>
+                    </div>
+                    <div class="goal-item" data-goal="minimize-waste">
+                        <div class="flex justify-between align-center mb-10">
+                            <span style="color: #28A745; cursor: pointer; text-decoration: underline;">Minimize Waste Generation</span>
+                            <span style="font-weight: 600;">45%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar warning" style="width: 45%;"></div>
+                        </div>
+                    </div>
+                    <div class="goal-item">
+                        <div class="flex justify-between align-center mb-10">
+                            <span style="color: #28A745; cursor: pointer; text-decoration: underline;">Water Conservation</span>
+                            <span style="font-weight: 600;">85%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 85%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Social Goals</div>
+                    </div>
+                    <div class="goal-item">
+                        <div class="flex justify-between align-center mb-10">
+                            <span style="color: #28A745; cursor: pointer; text-decoration: underline;">Employee Wellness Program</span>
+                            <span style="font-weight: 600;">60%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 60%;"></div>
+                        </div>
+                    </div>
+                    <div class="goal-item">
+                        <div class="flex justify-between align-center mb-10">
+                            <span style="color: #28A745; cursor: pointer; text-decoration: underline;">Diversity & Inclusion</span>
+                            <span style="font-weight: 600;">30%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar danger" style="width: 30%;"></div>
+                        </div>
+                    </div>
+                    <div class="goal-item">
+                        <div class="flex justify-between align-center mb-10">
+                            <span style="color: #28A745; cursor: pointer; text-decoration: underline;">Community Engagement</span>
+                            <span style="font-weight: 600;">55%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar warning" style="width: 55%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="card mt-20">
+                <div class="card-header">
+                    <div class="card-title">Recent Activity</div>
+                </div>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Activity</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2025-01-15</td>
+                                <td>Energy Audit Completed</td>
+                                <td>Environmental</td>
+                                <td><span class="badge badge-completed">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>2025-01-14</td>
+                                <td>Diversity Training Started</td>
+                                <td>Social</td>
+                                <td><span class="badge badge-in-progress">In Progress</span></td>
+                            </tr>
+                            <tr>
+                                <td>2025-01-13</td>
+                                <td>Compliance Review</td>
+                                <td>Governance</td>
+                                <td><span class="badge badge-pending">Pending</span></td>
+                            </tr>
+                            <tr>
+                                <td>2025-01-12</td>
+                                <td>Water Usage Report</td>
+                                <td>Environmental</td>
+                                <td><span class="badge badge-completed">Completed</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Planning Page -->
+        <div class="page" id="planning">
+            <h1 style="margin-bottom: 30px; color: #333333; font-weight: 600;">ESG Planning Steps</h1>
+            
+            <div class="planning-steps">
+                <div class="planning-step completed" data-step="standards">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Standards Selection</div>
+                    <div class="step-status">Completed</div>
+                </div>
+                <div class="planning-step in-progress" data-step="parameters">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Parameter Selection</div>
+                    <div class="step-status">In Progress</div>
+                </div>
+                <div class="planning-step pending" data-step="baseline">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Baseline Data Entry</div>
+                    <div class="step-status">Pending</div>
+                </div>
+                <div class="planning-step pending" data-step="goals">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Goal Setting</div>
+                    <div class="step-status">Pending</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Current Step: Parameter Selection</div>
+                    <div class="card-subtitle">Select the parameters that align with your organization's ESG objectives</div>
+                </div>
+                <p>Click on any step above to navigate to that specific planning phase. Your progress will be automatically saved.</p>
+                <div class="mt-20">
+                    <button class="btn btn-primary" onclick="showSubPage('parameters')">Continue to Parameter Selection</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Standards Selection Sub-page -->
+        <div class="page" id="standards">
+            <h1 style="margin-bottom: 30px; color: #333333; font-weight: 600;">Standards Selection</h1>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Available ESG Standards</div>
+                    <div class="card-subtitle">Select the standards that apply to your organization</div>
+                </div>
+                
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpandable(this)">
+                        <div class="flex align-center gap-10">
+                            <input type="checkbox" checked>
+                            <span style="font-weight: 600;">BRSR (Business Responsibility & Sustainability Reporting)</span>
+                            <span class="badge badge-mandatory">Mandatory</span>
+                            <span class="tooltip">
+                                <span class="material-icons" style="font-size: 16px; color: #6C757D;">info</span>
+                                <span class="tooltip-text">BRSR is mandatory for top 1000 listed companies in India</span>
+                            </span>
+                        </div>
+                        <span class="material-icons">expand_more</span>
+                    </div>
+                    <div class="expandable-content">
+                        <div class="expandable-content-inner">
+                            <p>The Business Responsibility and Sustainability Reporting (BRSR) is a comprehensive framework mandated by SEBI for the top 1000 listed companies in India.</p>
+                            <p><strong>Coverage:</strong> 9 principles covering environmental, social, and governance aspects</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpandable(this)">
+                        <div class="flex align-center gap-10">
+                            <input type="checkbox">
+                            <span style="font-weight: 600;">GRI (Global Reporting Initiative)</span>
+                            <span class="badge badge-voluntary">Voluntary</span>
+                            <span class="tooltip">
+                                <span class="material-icons" style="font-size: 16px; color: #6C757D;">info</span>
+                                <span class="tooltip-text">GRI is the most widely used global standard for sustainability reporting</span>
+                            </span>
+                        </div>
+                        <span class="material-icons">expand_more</span>
+                    </div>
+                    <div class="expandable-content">
+                        <div class="expandable-content-inner">
+                            <p>GRI Standards are the most widely used global standards for sustainability reporting, providing a comprehensive framework for organizations to report their impacts.</p>
+                            <p><strong>Coverage:</strong> Universal standards plus topic-specific standards for economic, environmental, and social impacts</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expandable">
+                    <div class="expandable-header" onclick="toggleExpandable(this)">
+                        <div class="flex align-center gap-10">
+                            <input type="checkbox">
+                            <span style="font-weight: 600;">IFRS S1 & S2 (Sustainability Standards)</span>
+                            <span class="badge badge-voluntary">Voluntary</span>
+                            <span class="tooltip">
+                                <span class="material-icons" style="font-size: 16px; color: #6C757D;">info</span>
+                                <span class="tooltip-text">IFRS Sustainability Standards focus on climate-related financial disclosures</span>
+                            </span>
+                        </div>
+                        <span class="material-icons">expand_more</span>
+                    </div>
+                    <div class="expandable-content">
+                        <div class="expandable-content-inner">
+                            <p>IFRS S1 and S2 are the international sustainability disclosure standards developed by the International Sustainability Standards Board (ISSB).</p>
+                            <p><strong>Coverage:</strong> S1 covers general sustainability-related financial disclosures, S2 focuses on climate-related disclosures</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-20 flex gap-10">
+                    <button class="btn btn-secondary" onclick="showPage('planning')">Back</button>
+                    <button class="btn btn-primary" onclick="saveStandards()">Save Selection</button>
+                    <button class="btn btn-primary" onclick="showSubPage('parameters')">Next</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Parameters Selection Sub-page -->
+        <div class="page" id="parameters">
+            <h1 style="margin-bottom: 20px; color: #333333; font-weight: 600;">Select Parameters</h1>
+            
+            <div class="flex justify-between align-center mb-20">
+                <p style="color: #6C757D;">Choose parameters that align with your ESG objectives</p>
+                <button class="btn btn-primary" onclick="openSlideDrawer('selected-parameters')">View Selected</button>
+            </div>
+
+            <div class="table-container">
+                <table class="table" id="parametersTable">
+                    <thead>
+                        <tr>
+                            <th>Select</th>
+                            <th>Parameter Name</th>
+                            <th>Scope</th>
+                            <th>Unit</th>
+                            <th>Category</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody id="parametersTableBody">
+                        <!-- Dynamic content populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-20 flex gap-10">
+                <button class="btn btn-secondary" onclick="showSubPage('standards')">Back</button>
+                <button class="btn btn-primary" onclick="saveParameters()">Save Selection</button>
+                <button class="btn btn-primary" onclick="showSubPage('baseline')">Next</button>
+            </div>
+        </div>
+
+        <!-- Baseline Data Entry Sub-page -->
+        <div class="page" id="baseline">
+            <h1 style="margin-bottom: 30px; color: #333333; font-weight: 600;">Baseline Data Entry</h1>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="flex justify-between align-center">
+                        <div>
+                            <div class="card-title">Enter Baseline Data</div>
+                            <div class="card-subtitle">Provide baseline values for your selected parameters</div>
+                        </div>
+                        <div class="form-group" style="margin: 0; min-width: 150px;">
+                            <label for="baselineYear">Baseline Year</label>
+                            <select id="baselineYear">
+                                <option value="">Select Year</option>
+                                <option value="2023">2023</option>
+                                <option value="2022">2022</option>
+                                <option value="2021">2021</option>
+                                <option value="2020">2020</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="baselineParametersList">
+                    <!-- Dynamic content populated by JavaScript -->
+                </div>
+
+                <div class="mt-20 p-20" style="background-color: #F8F9FA; border-radius: 8px;">
+                    <div class="flex align-center gap-10 mb-10">
+                        <span class="material-icons" style="color: #28A745;">cloud_upload</span>
+                        <span style="font-weight: 600;">Bulk Data Upload</span>
+                    </div>
+                    <p style="margin-bottom: 15px; color: #6C757D;">Upload a CSV file with your baseline data</p>
+                    <input type="file" accept=".csv" id="dataUpload" style="margin-bottom: 10px;">
+                    <button class="btn btn-secondary" onclick="uploadData()">Upload Data</button>
+                    <div id="uploadMessage" class="mt-10" style="display: none;"></div>
+                </div>
+
+                <div class="mt-20 flex gap-10">
+                    <button class="btn btn-secondary" onclick="showSubPage('parameters')">Back</button>
+                    <button class="btn btn-primary" onclick="saveBaseline()">Save Data</button>
+                    <button class="btn btn-primary" onclick="showSubPage('goals')">Next</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Goals Setting Sub-page -->
+        <div class="page" id="goals">
+            <h1 style="margin-bottom: 30px; color: #333333; font-weight: 600;">Goal Setting</h1>
+            
+            <div class="grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Goal Templates</div>
+                        <div class="card-subtitle">Choose from predefined goal templates</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="goalCategory">Category</label>
+                        <select id="goalCategory" onchange="updateGoalTemplates()">
+                            <option value="">Select Category</option>
+                            <option value="environmental">Environmental</option>
+                            <option value="social">Social</option>
+                            <option value="governance">Governance</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="goalTemplate">Choose Template</label>
+                        <select id="goalTemplate">
+                            <option value="">Select a category first</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-primary btn-full" onclick="addTemplateGoal()">Add Template Goal</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Custom Goal</div>
+                        <div class="card-subtitle">Create your own custom goal</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="customGoalName">Goal Name</label>
+                        <input type="text" id="customGoalName" placeholder="Enter goal name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customGoalDescription">Description</label>
+                        <textarea id="customGoalDescription" rows="4" placeholder="Describe your goal"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customGoalCategory">Category</label>
+                        <select id="customGoalCategory">
+                            <option value="">Select Category</option>
+                            <option value="environmental">Environmental</option>
+                            <option value="social">Social</option>
+                            <option value="governance">Governance</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-primary btn-full" onclick="addCustomGoal()">Add Custom Goal</button>
+                </div>
+            </div>
+
+            <!-- Goals List -->
+            <div class="card mt-20">
+                <div class="card-header">
+                    <div class="card-title">Your Goals</div>
+                </div>
+                <div id="goalsList">
+                    <p style="color: #6C757D; text-align: center; padding: 20px;">No goals added yet. Use the forms above to add goals.</p>
+                </div>
+            </div>
+
+            <div class="mt-20 flex gap-10">
+                <button class="btn btn-secondary" onclick="showSubPage('baseline')">Back</button>
+                <button class="btn btn-primary" onclick="saveGoals()">Save Goals</button>
+            </div>
+        </div>
+
+        <!-- Implementation Page -->
+        <div class="page" id="implementation">
+            <div class="implementation-header">
+                <h1 style="margin: 0; color: white; font-weight: 600;">ESG Implementation</h1>
+                <div class="last-updated">Last Updated: 10:35 PM IST, July 16, 2025</div>
+            </div>
+
+            <div id="implementationContent">
+                <!-- Dynamic content populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Monitoring Page -->
+        <div class="page" id="monitoring">
+            <h1 style="margin-bottom: 30px; color: #333333; font-weight: 600;">ESG Monitoring Dashboard</h1>
+            
+            <div class="flex justify-between align-center mb-20">
+                <p style="color: #6C757D;">Monitor your ESG performance across different categories</p>
+                <button class="btn btn-primary" onclick="exportDashboard()">
+                    <span class="material-icons" style="font-size: 16px; margin-right: 5px;">download</span>
+                    Export Dashboard
+                </button>
+            </div>
+
+            <div class="grid grid-3 mb-20">
+                <div class="card text-center">
+                    <div class="card-title" style="color: #28A745; font-size: 20px;">Environmental</div>
+                    <div class="chart-container" style="height: 200px;">
+                        <canvas id="environmentalChart"></canvas>
+                    </div>
+                </div>
+                <div class="card text-center">
+                    <div class="card-title" style="color: #007BFF; font-size: 20px;">Social</div>
+                    <div class="chart-container" style="height: 200px;">
+                        <canvas id="socialChart"></canvas>
+                    </div>
+                </div>
+                <div class="card text-center">
+                    <div class="card-title" style="color: #6F42C1; font-size: 20px;">Governance</div>
+                    <div class="chart-container" style="height: 200px;">
+                        <canvas id="governanceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Performance Trends</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Key Performance Indicators</div>
+                    </div>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>KPI</th>
+                                    <th>Current</th>
+                                    <th>Target</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Energy Reduction</td>
+                                    <td>15%</td>
+                                    <td>20%</td>
+                                    <td><span class="badge badge-in-progress">In Progress</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Water Conservation</td>
+                                    <td>25%</td>
+                                    <td>25%</td>
+                                    <td><span class="badge badge-completed">Achieved</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Employee Satisfaction</td>
+                                    <td>78%</td>
+                                    <td>85%</td>
+                                    <td><span class="badge badge-in-progress">In Progress</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Board Diversity</td>
+                                    <td>40%</td>
+                                    <td>50%</td>
+                                    <td><span class="badge badge-in-progress">In Progress</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reporting Page -->
+        <div class="page" id="reporting">
+            <h1 style="margin-bottom: 30px; color: #333333; font-weight: 600;">ESG Reporting</h1>
+            
+            <div class="nav-tabs" style="position: relative; background-color: white; box-shadow: none; margin-bottom: 20px; border-bottom: 1px solid #DEE2E6;">
+                <button class="nav-tab active" data-standard="brsr">BRSR</button>
+                <button class="nav-tab" data-standard="gri">GRI</button>
+                <button class="nav-tab" data-standard="ifrs">IFRS</button>
+            </div>
+
+            <div id="reportingContent">
+                <!-- Dynamic content populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- ESG AI Page -->
+        <div class="page" id="esg-ai">
+            <div style="display: flex; justify-content: center; align-items: center; min-height: 400px; text-align: center;">
+                <div>
+                    <span class="material-icons" style="font-size: 120px; color: #28A745; margin-bottom: 20px;">psychology</span>
+                    <h1 style="color: #333333; margin-bottom: 20px;">ESG AI Assistant</h1>
+                    <h2 style="color: #6C757D; font-weight: 400; font-size: 24px;">Coming Soon</h2>
+                    <p style="color: #6C757D; margin-top: 20px; max-width: 500px;">Our AI-powered ESG assistant will help you analyze data, generate insights, and provide recommendations for your sustainability journey.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide Drawer -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="closeSlideDrawer()"></div>
+    <div class="slide-drawer" id="slideDrawer">
+        <div class="slide-drawer-header">
+            <h3 id="drawerTitle">Drawer Title</h3>
+            <button style="background: none; border: none; cursor: pointer;" onclick="closeSlideDrawer()">
+                <span class="material-icons">close</span>
+            </button>
+        </div>
+        <div class="slide-drawer-content" id="drawerContent">
+            <!-- Dynamic content -->
+        </div>
+    </div>
+
+    <script>
+        // Global Variables
+        let currentPage = 'login';
+        let currentSubPage = null;
+        let selectedParameters = [];
+        let goals = [];
+        let implementations = {};
+        let sidebarVisible = false;
+
+        // Sample Data
+        const parameters = {
+            environmental: {
+                energy: [
+                    { name: 'Electricity Consumption from Grid', scope: 'Scope 2', unit: 'kWh', mandatory: true },
+                    { name: 'Renewable Energy Consumption', scope: 'Scope 1', unit: 'kWh', mandatory: false },
+                    { name: 'Total Energy Consumption', scope: 'Scope 1 & 2', unit: 'kWh', mandatory: true },
+                    { name: 'Energy Intensity', scope: 'Scope 1 & 2', unit: 'kWh/unit product', mandatory: false }
+                ],
+                water: [
+                    { name: 'Total Water Consumption', scope: 'Direct', unit: 'Liters', mandatory: true },
+                    { name: 'Water Recycled', scope: 'Direct', unit: 'Liters', mandatory: false },
+                    { name: 'Water Intensity', scope: 'Direct', unit: 'Liters/unit product', mandatory: false }
+                ],
+                waste: [
+                    { name: 'Total Waste Generated', scope: 'Direct', unit: 'Tonnes', mandatory: true },
+                    { name: 'Waste Recycled', scope: 'Direct', unit: 'Tonnes', mandatory: false },
+                    { name: 'Hazardous Waste', scope: 'Direct', unit: 'Tonnes', mandatory: true }
+                ],
+                biodiversity: [
+                    { name: 'Land Use Change', scope: 'Direct', unit: 'Hectares', mandatory: false },
+                    { name: 'Biodiversity Impact Assessment', scope: 'Indirect', unit: 'Score', mandatory: false }
+                ]
+            },
+            social: {
+                employment: [
+                    { name: 'Total Employees', scope: 'Direct', unit: 'Count', mandatory: true },
+                    { name: 'Employee Turnover Rate', scope: 'Direct', unit: 'Percentage', mandatory: false },
+                    { name: 'Employee Satisfaction Score', scope: 'Direct', unit: 'Score', mandatory: false }
+                ],
+                'health-safety': [
+                    { name: 'Workplace Accidents', scope: 'Direct', unit: 'Count', mandatory: true },
+                    { name: 'Lost Time Injury Rate', scope: 'Direct', unit: 'Rate', mandatory: false },
+                    { name: 'Safety Training Hours', scope: 'Direct', unit: 'Hours', mandatory: false }
+                ],
+                diversity: [
+                    { name: 'Gender Diversity Ratio', scope: 'Direct', unit: 'Percentage', mandatory: false },
+                    { name: 'Leadership Diversity', scope: 'Direct', unit: 'Percentage', mandatory: false }
+                ]
+            },
+            governance: [
+                { name: 'Board Independence', scope: 'Direct', unit: 'Percentage', mandatory: true },
+                { name: 'Board Diversity', scope: 'Direct', unit: 'Percentage', mandatory: false },
+                { name: 'Ethics Training Completion', scope: 'Direct', unit: 'Percentage', mandatory: false },
+                { name: 'Compliance Violations', scope: 'Direct', unit: 'Count', mandatory: true }
+            ]
+        };
+
+        const goalTemplates = {
+            environmental: [
+                'Reduce Energy Consumption by 20%',
+                'Achieve 50% Renewable Energy',
+                'Minimize Waste Generation',
+                'Improve Water Efficiency',
+                'Carbon Neutrality by 2030'
+            ],
+            social: [
+                'Enhance Employee Wellness',
+                'Improve Workplace Safety',
+                'Increase Diversity & Inclusion',
+                'Community Engagement Program',
+                'Skills Development Initiative'
+            ],
+            governance: [
+                'Strengthen Board Governance',
+                'Improve Compliance Training',
+                'Enhance Transparency',
+                'Risk Management Framework',
+                'Stakeholder Engagement'
+            ]
+        };
+
+        // Initialize Application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeEventListeners();
+            loadSelectedParameters();
+            showPage('login');
+        });
+
+        function initializeEventListeners() {
+            // Login form
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                showPage('organization');
+            });
+
+            // Organization form
+            document.getElementById('orgForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                showPage('home');
+                document.getElementById('navbar').style.display = 'block';
+                document.getElementById('sidebarTrigger').style.display = 'block';
+                document.getElementById('mainContent').style.marginTop = '60px';
+            });
+
+            // Navigation tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const page = this.getAttribute('data-page');
+                    showPage(page);
+                });
+            });
+
+            // Hamburger menu
+            document.getElementById('hamburger').addEventListener('click', function() {
+                const navTabs = document.getElementById('navTabs');
+                navTabs.classList.toggle('mobile-show');
+            });
+
+            // Sidebar trigger
+            document.getElementById('sidebarTrigger').addEventListener('mouseenter', showSidebar);
+            document.getElementById('sidebar').addEventListener('mouseleave', hideSidebar);
+
+            // Planning steps
+            document.querySelectorAll('.planning-step').forEach(step => {
+                step.addEventListener('click', function() {
+                    const stepName = this.getAttribute('data-step');
+                    showSubPage(stepName);
+                });
+            });
+
+            // Goal links from home page
+            document.querySelectorAll('.goal-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const goalId = this.getAttribute('data-goal');
+                    if (goalId) {
+                        showPage('implementation');
+                        // Focus on specific goal in implementation
+                        setTimeout(() => {
+                            const goalElement = document.querySelector(`[data-goal-id="${goalId}"]`);
+                            if (goalElement) {
+                                goalElement.scrollIntoView({ behavior: 'smooth' });
+                                goalElement.click(); // Expand the goal
+                            }
+                        }, 500);
+                    }
+                });
+            });
+        }
+
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            currentPage = pageId;
+            currentSubPage = null;
+
+            // Update navigation
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            const activeTab = document.querySelector(`[data-page="${pageId}"]`);
+            if (activeTab) {
+                activeTab.classList.add('active');
+            }
+
+            // Update sidebar content
+            updateSidebarContent(pageId);
+
+            // Initialize page-specific content
+            initializePageContent(pageId);
+        }
+
+        function showSubPage(subPageId) {
+            currentSubPage = subPageId;
+            showPage(subPageId);
+        }
+
+        function updateSidebarContent(pageId) {
+            const sidebarContent = document.getElementById('sidebarContent');
+            
+            switch(pageId) {
+                case 'parameters':
+                case 'baseline':
+                case 'goals':
+                case 'implementation':
+                    sidebarContent.innerHTML = createCategorySidebar();
+                    break;
+                case 'monitoring':
+                    sidebarContent.innerHTML = createMonitoringSidebar();
+                    break;
+                case 'reporting':
+                    sidebarContent.innerHTML = createReportingSidebar();
+                    break;
+                default:
+                    sidebarContent.innerHTML = '';
+            }
+
+            // Initialize sidebar interactions
+            initializeSidebarInteractions();
+        }
+
+        function createCategorySidebar() {
+            return `
+                <div class="sidebar-category">
+                    <div class="sidebar-category-title" onclick="toggleSidebarCategory(this)">
+                        <span><span class="material-icons" style="font-size: 18px; margin-right: 8px;">eco</span>Environmental</span>
+                        <span class="material-icons">expand_more</span>
+                    </div>
+                    <div class="sidebar-subcategories">
+                        <div class="sidebar-subcategory" data-category="energy">Energy</div>
+                        <div class="sidebar-subcategory" data-category="water">Water</div>
+                        <div class="sidebar-subcategory" data-category="waste">Waste</div>
+                        <div class="sidebar-subcategory" data-category="biodiversity">Biodiversity</div>
+                    </div>
+                </div>
+                <div class="sidebar-category">
+                    <div class="sidebar-category-title" onclick="toggleSidebarCategory(this)">
+                        <span><span class="material-icons" style="font-size: 18px; margin-right: 8px;">people</span>Social</span>
+                        <span class="material-icons">expand_more</span>
+                    </div>
+                    <div class="sidebar-subcategories">
+                        <div class="sidebar-subcategory" data-category="employment">Employment</div>
+                        <div class="sidebar-subcategory" data-category="health-safety">Health & Safety</div>
+                        <div class="sidebar-subcategory" data-category="diversity">Diversity</div>
+                    </div>
+                </div>
+                <div class="sidebar-category">
+                    <div class="sidebar-category-title" onclick="toggleSidebarCategory(this)">
+                        <span><span class="material-icons" style="font-size: 18px; margin-right: 8px;">account_balance</span>Governance</span>
+                        <span class="material-icons">expand_more</span>
+                    </div>
+                    <div class="sidebar-subcategories">
+                        <div class="sidebar-subcategory" data-category="governance">All Governance</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createMonitoringSidebar() {
+            return `
+                <div class="sidebar-category">
+                    <div class="sidebar-subcategory active" data-category="environmental">
+                        <span class="material-icons" style="font-size: 18px; margin-right: 8px;">eco</span>Environmental
+                    </div>
+                    <div class="sidebar-subcategory" data-category="social">
+                        <span class="material-icons" style="font-size: 18px; margin-right: 8px;">people</span>Social
+                    </div>
+                    <div class="sidebar-subcategory" data-category="governance">
+                        <span class="material-icons" style="font-size: 18px; margin-right: 8px;">account_balance</span>Governance
+                    </div>
+                </div>
+            `;
+        }
+
+        function createReportingSidebar() {
+            return `
+                <div class="sidebar-category">
+                    <div class="sidebar-category-title" onclick="toggleSidebarCategory(this)">
+                        <span>General Disclosures</span>
+                        <span class="material-icons">expand_more</span>
+                    </div>
+                    <div class="sidebar-subcategories expanded">
+                        <div class="sidebar-subcategory active" data-section="general">General Disclosures</div>
+                    </div>
+                </div>
+                <div class="sidebar-category">
+                    <div class="sidebar-category-title" onclick="toggleSidebarCategory(this)">
+                        <span>9 Principles</span>
+                        <span class="material-icons">expand_more</span>
+                    </div>
+                    <div class="sidebar-subcategories">
+                        <div class="sidebar-subcategory" data-section="principle1">Principle 1</div>
+                        <div class="sidebar-subcategory" data-section="principle2">Principle 2</div>
+                        <div class="sidebar-subcategory" data-section="principle3">Principle 3</div>
+                        <div class="sidebar-subcategory" data-section="principle4">Principle 4</div>
+                        <div class="sidebar-subcategory" data-section="principle5">Principle 5</div>
+                        <div class="sidebar-subcategory" data-section="principle6">Principle 6</div>
+                        <div class="sidebar-subcategory" data-section="principle7">Principle 7</div>
+                        <div class="sidebar-subcategory" data-section="principle8">Principle 8</div>
+                        <div class="sidebar-subcategory" data-section="principle9">Principle 9</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initializeSidebarInteractions() {
+            document.querySelectorAll('.sidebar-subcategory').forEach(item => {
+                item.addEventListener('click', function() {
+                    // Remove active class from all subcategories
+                    document.querySelectorAll('.sidebar-subcategory').forEach(sub => {
+                        sub.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Handle category selection based on current page
+                    const category = this.getAttribute('data-category');
+                    const section = this.getAttribute('data-section');
+                    
+                    if (currentPage === 'parameters' && category) {
+                        updateParametersTable(category);
+                    } else if (currentPage === 'monitoring' && category) {
+                        updateMonitoringCharts(category);
+                    } else if (currentPage === 'reporting' && section) {
+                        updateReportingContent(section);
+                    }
+                });
+            });
+        }
+
+        function toggleSidebarCategory(element) {
+            const subcategories = element.nextElementSibling;
+            const icon = element.querySelector('.material-icons:last-child');
+            
+            subcategories.classList.toggle('expanded');
+            icon.textContent = subcategories.classList.contains('expanded') ? 'expand_less' : 'expand_more';
+        }
+
+        function showSidebar() {
+            document.getElementById('sidebar').classList.add('show');
+            sidebarVisible = true;
+        }
+
+        function hideSidebar() {
+            setTimeout(() => {
+                if (!document.querySelector('#sidebar:hover')) {
+                    document.getElementById('sidebar').classList.remove('show');
+                    sidebarVisible = false;
+                }
+            }, 100);
+        }
+
+        function initializePageContent(pageId) {
+            switch(pageId) {
+                case 'parameters':
+                    updateParametersTable('energy'); // Default to energy
+                    break;
+                case 'baseline':
+                    updateBaselineParameters();
+                    break;
+                case 'implementation':
+                    updateImplementationContent();
+                    break;
+                case 'monitoring':
+                    initializeCharts();
+                    break;
+                case 'reporting':
+                    updateReportingContent('general');
+                    break;
+            }
+        }
+
+        function updateParametersTable(subcategory) {
+            const tbody = document.getElementById('parametersTableBody');
+            const categoryData = subcategory === 'governance' ? 
+                parameters.governance : 
+                parameters.environmental[subcategory] || parameters.social[subcategory] || [];
+            
+            tbody.innerHTML = '';
+            
+            categoryData.forEach((param, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <input type="checkbox" ${param.mandatory ? 'checked disabled' : ''} 
+                               data-param="${JSON.stringify(param).replace(/"/g, '&quot;')}"
+                               onchange="toggleParameterSelection(this)">
+                    </td>
+                    <td>${param.name}</td>
+                    <td>${param.scope}</td>
+                    <td>${param.unit}</td>
+                    <td>${subcategory.charAt(0).toUpperCase() + subcategory.slice(1)}</td>
+                    <td>
+                        <span class="badge ${param.mandatory ? 'badge-mandatory' : 'badge-voluntary'}">
+                            ${param.mandatory ? 'Mandatory' : 'Voluntary'}
+                        </span>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function toggleParameterSelection(checkbox) {
+            const paramData = JSON.parse(checkbox.getAttribute('data-param').replace(/&quot;/g, '"'));
+            
+            if (checkbox.checked) {
+                selectedParameters.push(paramData);
+            } else {
+                selectedParameters = selectedParameters.filter(p => p.name !== paramData.name);
+            }
+            
+            localStorage.setItem('selectedParameters', JSON.stringify(selectedParameters));
+        }
+
+        function loadSelectedParameters() {
+            const saved = localStorage.getItem('selectedParameters');
+            if (saved) {
+                selectedParameters = JSON.parse(saved);
+            }
+            
+            // Add mandatory parameters
+            Object.values(parameters).forEach(category => {
+                if (Array.isArray(category)) {
+                    category.forEach(param => {
+                        if (param.mandatory && !selectedParameters.find(p => p.name === param.name)) {
+                            selectedParameters.push(param);
+                        }
+                    });
+                } else {
+                    Object.values(category).forEach(subcategory => {
+                        subcategory.forEach(param => {
+                            if (param.mandatory && !selectedParameters.find(p => p.name === param.name)) {
+                                selectedParameters.push(param);
+                            }
+                        });
+                    });
+                }
+            });
+        }
+
+        function updateBaselineParameters() {
+            const container = document.getElementById('baselineParametersList');
+            container.innerHTML = '';
+            
+            if (selectedParameters.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #6C757D; padding: 20px;">No parameters selected. Please complete Parameter Selection first.</p>';
+                return;
+            }
+            
+            selectedParameters.forEach(param => {
+                const paramDiv = document.createElement('div');
+                paramDiv.className = 'form-group';
+                paramDiv.innerHTML = `
+                    <label for="baseline_${param.name.replace(/\s/g, '_')}">${param.name}</label>
+                    <div class="flex gap-10">
+                        <input type="number" id="baseline_${param.name.replace(/\s/g, '_')}" 
+                               placeholder="Enter baseline value" style="flex: 1;">
+                        <span style="min-width: 80px; padding: 12px; background-color: #F8F9FA; border: 1px solid #DEE2E6; border-radius: 5px; font-size: 12px; color: #6C757D;">
+                            ${param.unit}
+                        </span>
+                        <span style="min-width: 100px; padding: 12px; background-color: #F8F9FA; border: 1px solid #DEE2E6; border-radius: 5px; font-size: 12px; color: #6C757D;">
+                            ${param.scope}
+                        </span>
+                    </div>
+                `;
+                container.appendChild(paramDiv);
+            });
+        }
+
+        function updateGoalTemplates() {
+            const category = document.getElementById('goalCategory').value;
+            const templateSelect = document.getElementById('goalTemplate');
+            
+            templateSelect.innerHTML = '<option value="">Select template</option>';
+            
+            if (category && goalTemplates[category]) {
+                goalTemplates[category].forEach(template => {
+                    const option = document.createElement('option');
+                    option.value = template;
+                    option.textContent = template;
+                    templateSelect.appendChild(option);
+                });
+            }
+        }
+
+        function addTemplateGoal() {
+            const category = document.getElementById('goalCategory').value;
+            const template = document.getElementById('goalTemplate').value;
+            
+            if (!category || !template) {
+                alert('Please select both category and template');
+                return;
+            }
+            
+            const goal = {
+                id: Date.now(),
+                name: template,
+                description: `Template goal: ${template}`,
+                category: category
+            };
+            
+            goals.push(goal);
+            updateGoalsList();
+            
+            // Reset form
+            document.getElementById('goalCategory').value = '';
+            document.getElementById('goalTemplate').value = '';
+        }
+
+        function addCustomGoal() {
+            const name = document.getElementById('customGoalName').value;
+            const description = document.getElementById('customGoalDescription').value;
+            const category = document.getElementById('customGoalCategory').value;
+            
+            if (!name || !description || !category) {
+                alert('Please fill all fields');
+                return;
+            }
+            
+            const goal = {
+                id: Date.now(),
+                name: name,
+                description: description,
+                category: category
+            };
+            
+            goals.push(goal);
+            updateGoalsList();
+            
+            // Reset form
+            document.getElementById('customGoalName').value = '';
+            document.getElementById('customGoalDescription').value = '';
+            document.getElementById('customGoalCategory').value = '';
+        }
+
+        function updateGoalsList() {
+            const container = document.getElementById('goalsList');
+            
+            if (goals.length === 0) {
+                container.innerHTML = '<p style="color: #6C757D; text-align: center; padding: 20px;">No goals added yet. Use the forms above to add goals.</p>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            goals.forEach(goal => {
+                const goalDiv = document.createElement('div');
+                goalDiv.className = 'card';
+                goalDiv.style.margin = '10px 0';
+                goalDiv.innerHTML = `
+                    <div class="flex justify-between align-center">
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 5px;">${goal.name}</div>
+                            <div style="color: #6C757D; font-size: 14px; margin-bottom: 5px;">${goal.description}</div>
+                            <span class="badge badge-voluntary">${goal.category}</span>
+                        </div>
+                        <button class="btn btn-secondary" onclick="removeGoal(${goal.id})" style="padding: 8px 12px;">Remove</button>
+                    </div>
+                `;
+                container.appendChild(goalDiv);
+            });
+        }
+
+        function removeGoal(goalId) {
+            goals = goals.filter(g => g.id !== goalId);
+            updateGoalsList();
+        }
+
+        function updateImplementationContent() {
+            const container = document.getElementById('implementationContent');
+            
+            // Sample implementation data
+            const implementationData = {
+                environmental: {
+                    goals: [
+                        {
+                            id: 'reduce-energy',
+                            name: 'Reduce Energy Consumption',
+                            initiatives: [
+                                {
+                                    name: 'Energy Audit',
+                                    targets: [
+                                        {
+                                            name: '80% Renewable Energy',
+                                            tasks: [
+                                                { name: 'Conduct Energy Audit', assignedTo: 'John Doe', dueDate: '2025-02-15', status: 'In Progress' },
+                                                { name: 'Install Solar Panels', assignedTo: 'Jane Smith', dueDate: '2025-03-30', status: 'Pending' }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            id: 'minimize-waste',
+                            name: 'Minimize Waste Generation',
+                            initiatives: [
+                                {
+                                    name: 'Waste Reduction Program',
+                                    targets: [
+                                        {
+                                            name: '50% Waste Reduction',
+                                            tasks: [
+                                                { name: 'Implement Recycling Program', assignedTo: 'Bob Johnson', dueDate: '2025-02-28', status: 'Completed' }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                social: {
+                    goals: [
+                        {
+                            id: 'employee-wellness',
+                            name: 'Employee Wellness Program',
+                            initiatives: [
+                                {
+                                    name: 'Health & Wellness Initiative',
+                                    targets: [
+                                        {
+                                            name: 'Improve Employee Satisfaction',
+                                            tasks: [
+                                                { name: 'Conduct Wellness Survey', assignedTo: 'HR Team', dueDate: '2025-01-31', status: 'In Progress' }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                governance: {
+                    goals: [
+                        {
+                            id: 'board-governance',
+                            name: 'Strengthen Board Governance',
+                            initiatives: [
+                                {
+                                    name: 'Governance Review',
+                                    targets: [
+                                        {
+                                            name: 'Board Diversity Target',
+                                            tasks: [
+                                                { name: 'Review Board Composition', assignedTo: 'Legal Team', dueDate: '2025-03-15', status: 'Pending' }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            };
+            
+            container.innerHTML = '';
+            
+            Object.keys(implementationData).forEach(category => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'card mb-20';
+                
+                let categoryContent = `
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="material-icons" style="margin-right: 10px; vertical-align: middle;">
+                                ${category === 'environmental' ? 'eco' : category === 'social' ? 'people' : 'account_balance'}
+                            </span>
+                            ${category.charAt(0).toUpperCase() + category.slice(1)} Goals
+                        </div>
+                    </div>
+                `;
+                
+                implementationData[category].goals.forEach(goal => {
+                    categoryContent += `
+                        <div class="expandable" data-goal-id="${goal.id}">
+                            <div class="expandable-header" onclick="toggleExpandable(this)">
+                                <span style="font-weight: 600;">${goal.name}</span>
+                                <span class="material-icons">expand_more</span>
+                            </div>
+                            <div class="expandable-content">
+                                <div class="expandable-content-inner">
+                    `;
+                    
+                    goal.initiatives.forEach(initiative => {
+                        categoryContent += `
+                            <div class="expandable" style="margin-left: 20px;">
+                                <div class="expandable-header" onclick="toggleExpandable(this)">
+                                    <span>Initiative: ${initiative.name}</span>
+                                    <span class="material-icons">expand_more</span>
+                                </div>
+                                <div class="expandable-content">
+                                    <div class="expandable-content-inner">
+                        `;
+                        
+                        initiative.targets.forEach(target => {
+                            categoryContent += `
+                                <div class="expandable" style="margin-left: 20px;">
+                                    <div class="expandable-header" onclick="toggleExpandable(this)">
+                                        <span>Target: ${target.name}</span>
+                                        <span class="material-icons">expand_more</span>
+                                    </div>
+                                    <div class="expandable-content">
+                                        <div class="expandable-content-inner">
+                                            <div class="table-container">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Task</th>
+                                                            <th>Assigned To</th>
+                                                            <th>Due Date</th>
+                                                            <th>Status</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                            `;
+                            
+                            target.tasks.forEach(task => {
+                                const statusClass = task.status === 'Completed' ? 'badge-completed' :
+                                                   task.status === 'In Progress' ? 'badge-in-progress' : 'badge-pending';
+                                
+                                categoryContent += `
+                                    <tr>
+                                        <td>${task.name}</td>
+                                        <td>${task.assignedTo}</td>
+                                        <td>${task.dueDate}</td>
+                                        <td><span class="badge ${statusClass}">${task.status}</span></td>
+                                    </tr>
+                                `;
+                            });
+                            
+                            categoryContent += `
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        
+                        categoryContent += `
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    categoryContent += `
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                categoryDiv.innerHTML = categoryContent;
+                container.appendChild(categoryDiv);
+            });
+            
+            // Add management buttons
+            const managementDiv = document.createElement('div');
+            managementDiv.className = 'flex gap-10 mt-20';
+            managementDiv.innerHTML = `
+                <button class="btn btn-primary" onclick="openSlideDrawer('add-initiative')">Add Initiative</button>
+                <button class="btn btn-primary" onclick="openSlideDrawer('add-target')">Add Target</button>
+                <button class="btn btn-primary" onclick="openSlideDrawer('add-task')">Add Task</button>
+            `;
+            container.appendChild(managementDiv);
+        }
+
+        function initializeCharts() {
+            // Environmental Chart
+            const envCtx = document.getElementById('environmentalChart');
+            if (envCtx) {
+                new Chart(envCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Energy', 'Water', 'Waste', 'Emissions'],
+                        datasets: [{
+                            data: [30, 25, 20, 25],
+                            backgroundColor: ['#28A745', '#FFC107', '#DC3545', '#007BFF']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Social Chart
+            const socialCtx = document.getElementById('socialChart');
+            if (socialCtx) {
+                new Chart(socialCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Employment', 'Safety', 'Diversity'],
+                        datasets: [{
+                            data: [78, 85, 65],
+                            backgroundColor: ['#007BFF', '#28A745', '#FFC107']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Governance Chart
+            const govCtx = document.getElementById('governanceChart');
+            if (govCtx) {
+                new Chart(govCtx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Board Independence', 'Compliance', 'Transparency', 'Risk Management'],
+                        datasets: [{
+                            data: [80, 75, 85, 70],
+                            backgroundColor: 'rgba(111, 66, 193, 0.2)',
+                            borderColor: '#6F42C1',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 100
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Trend Chart
+            const trendCtx = document.getElementById('trendChart');
+            if (trendCtx) {
+                new Chart(trendCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        datasets: [
+                            {
+                                label: 'Environmental',
+                                data: [65, 68, 70, 72, 75, 78],
+                                borderColor: '#28A745',
+                                backgroundColor: 'rgba(40, 167, 69, 0.1)'
+                            },
+                            {
+                                label: 'Social',
+                                data: [60, 62, 65, 68, 70, 72],
+                                borderColor: '#007BFF',
+                                backgroundColor: 'rgba(0, 123, 255, 0.1)'
+                            },
+                            {
+                                label: 'Governance',
+                                data: [70, 72, 74, 75, 76, 78],
+                                borderColor: '#6F42C1',
+                                backgroundColor: 'rgba(111, 66, 193, 0.1)'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function updateMonitoringCharts(category) {
+            // This would update charts based on selected category
+            console.log('Updating monitoring charts for category:', category);
+        }
+
+        function updateReportingContent(section) {
+            const container = document.getElementById('reportingContent');
+            
+            const reportingData = {
+                general: {
+                    title: 'BRSR General Disclosures',
+                    fields: [
+                        { id: 'Q1', label: 'Corporate Identity Number', type: 'text', tag: 'Autopopulated', value: 'L12345MH2010PLC123456' },
+                        { id: 'Q2', label: 'Name of the Listed Entity', type: 'text', tag: 'Autopopulated', value: 'Sample Corporation Ltd.' },
+                        { id: 'Q3', label: 'Year of incorporation', type: 'number', tag: 'Essential', value: '2010' },
+                        { id: 'Q4', label: 'Registered office address', type: 'textarea', tag: 'Essential', value: '' },
+                        { id: 'Q5', label: 'Corporate address', type: 'textarea', tag: 'Essential', value: '' },
+                        { id: 'Q6', label: 'E-mail', type: 'email', tag: 'Autopopulated', value: 'info@samplecorp.com' },
+                        { id: 'Q7', label: 'Telephone', type: 'tel', tag: 'Essential', value: '' },
+                        { id: 'Q8', label: 'Website', type: 'url', tag: 'Autopopulated', value: 'www.samplecorp.com' },
+                        { id: 'Q9', label: 'Financial year for which reporting is being done', type: 'text', tag: 'Essential', value: '' },
+                        { id: 'Q10', label: 'Name of the Stock Exchange(s)', type: 'text', tag: 'Essential', value: '' },
+                        { id: 'Q11', label: 'Paid-up Capital', type: 'number', tag: 'Autopopulated', value: '100000000' },
+                        { id: 'Q12', label: 'Name and contact details of person responsible for ESG data', type: 'textarea', tag: 'Essential', value: '' },
+                        { id: 'Q13', label: 'Reporting boundary', type: 'select', tag: 'Leadership', value: '', options: ['Standalone', 'Consolidated'] }
+                    ]
+                },
+                principle1: {
+                    title: 'Principle 1: Ethics, Transparency and Accountability',
+                    fields: [
+                        { id: 'P1.E1', label: 'Does the entity have a stated purpose', type: 'select', tag: 'Essential', value: '', options: ['Yes', 'No'] },
+                        { id: 'P1.E2', label: 'Does the entity have a stated vision', type: 'select', tag: 'Essential', value: '', options: ['Yes', 'No'] },
+                        { id: 'P1.L1', label: 'Explain the audit and risk management process', type: 'textarea', tag: 'Leadership', value: '' },
+                        { id: 'P1.L2', label: 'Provide details of corrective action taken', type: 'file', tag: 'Leadership', value: '' }
+                    ]
+                }
+            };
+            
+            const sectionData = reportingData[section] || reportingData.general;
+            
+            container.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">${sectionData.title}</div>
+                    </div>
+                    
+                    <form id="reportingForm">
+                        ${sectionData.fields.map(field => {
+                            const tagClass = field.tag === 'Autopopulated' ? 'badge-completed' :
+                                           field.tag === 'Essential' ? 'badge-mandatory' : 'badge-voluntary';
+                            
+                            let fieldHtml = '';
+                            
+                            if (field.type === 'select') {
+                                fieldHtml = `
+                                    <select id="${field.id}" ${field.tag === 'Autopopulated' ? 'disabled' : ''}>
+                                        <option value="">Select option</option>
+                                        ${field.options.map(option => `<option value="${option}" ${field.value === option ? 'selected' : ''}>${option}</option>`).join('')}
+                                    </select>
+                                `;
+                            } else if (field.type === 'textarea') {
+                                fieldHtml = `
+                                    <textarea id="${field.id}" rows="3" ${field.tag === 'Autopopulated' ? 'disabled' : ''}>${field.value}</textarea>
+                                `;
+                            } else if (field.type === 'file') {
+                                fieldHtml = `
+                                    <input type="file" id="${field.id}" accept=".pdf,.doc,.docx">
+                                `;
+                            } else {
+                                fieldHtml = `
+                                    <input type="${field.type}" id="${field.id}" value="${field.value}" ${field.tag === 'Autopopulated' ? 'disabled' : ''}>
+                                `;
+                            }
+                            
+                            return `
+                                <div class="form-group">
+                                    <label for="${field.id}">
+                                        ${field.label}
+                                        <span class="badge ${tagClass}" style="margin-left: 10px;">${field.tag}</span>
+                                    </label>
+                                    ${fieldHtml}
+                                </div>
+                            `;
+                        }).join('')}
+                    </form>
+                    
+                    <div class="mt-20 flex gap-10">
+                        <button class="btn btn-primary" onclick="generateReport()">Generate Report</button>
+                        <button class="btn btn-secondary" onclick="previewReport()">Preview</button>
+                    </div>
+                </div>
+                
+                <div class="card mt-20" id="reportPreview" style="display: none;">
+                    <div class="card-header">
+                        <div class="card-title">Report Preview</div>
+                    </div>
+                    <div id="previewContent">
+                        <!-- Preview content will be generated here -->
+                    </div>
+                    <div class="mt-20 flex gap-10">
+                        <button class="btn btn-primary" onclick="downloadReport('pdf')">Download PDF</button>
+                        <button class="btn btn-secondary" onclick="downloadReport('csv')">Download CSV</button>
+                        <button class="btn btn-secondary" onclick="downloadReport('word')">Download Word</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Utility Functions
+        function toggleExpandable(element) {
+            const content = element.nextElementSibling;
+            const icon = element.querySelector('.material-icons:last-child');
+            
+            content.classList.toggle('expanded');
+            icon.textContent = content.classList.contains('expanded') ? 'expand_less' : 'expand_more';
+        }
+
+        function openSlideDrawer(type) {
+            const drawer = document.getElementById('slideDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+            const title = document.getElementById('drawerTitle');
+            const content = document.getElementById('drawerContent');
+            
+            let drawerContent = '';
+            
+            switch(type) {
+                case 'selected-parameters':
+                    title.textContent = 'Selected Parameters';
+                    drawerContent = `
+                        <div class="mb-20">
+                            <p>Total Selected: ${selectedParameters.length} parameters</p>
+                        </div>
+                        ${selectedParameters.map(param => `
+                            <div class="card mb-10">
+                                <div style="font-weight: 600;">${param.name}</div>
+                                <div style="font-size: 12px; color: #6C757D;">
+                                    ${param.scope} • ${param.unit} • 
+                                    <span class="badge ${param.mandatory ? 'badge-mandatory' : 'badge-voluntary'}">
+                                        ${param.mandatory ? 'Mandatory' : 'Voluntary'}
+                                    </span>
+                                </div>
+                            </div>
+                        `).join('')}
+                        <div class="mt-20">
+                            <button class="btn btn-primary btn-full" onclick="exportParameters()">Export CSV</button>
+                        </div>
+                    `;
+                    break;
+                case 'add-initiative':
+                    title.textContent = 'Add Initiative';
+                    drawerContent = `
+                        <form id="initiativeForm">
+                            <div class="form-group">
+                                <label>Initiative Name</label>
+                                <input type="text" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea rows="3" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select required>
+                                    <option value="">Select Status</option>
+                                    <option value="planning">Planning</option>
+                                    <option value="in-progress">In Progress</option>
+                                    <option value="completed">Completed</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-full">Add Initiative</button>
+                        </form>
+                    `;
+                    break;
+                case 'add-target':
+                    title.textContent = 'Add Target';
+                    drawerContent = `
+                        <form id="targetForm">
+                            <div class="form-group">
+                                <label>Target Name</label>
+                                <input type="text" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Category</label>
+                                <select required>
+                                    <option value="">Select Category</option>
+                                    <option value="environmental">Environmental</option>
+                                    <option value="social">Social</option>
+                                    <option value="governance">Governance</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Level</label>
+                                <select required>
+                                    <option value="">Select Level</option>
+                                    <option value="organization">Organization</option>
+                                    <option value="department">Department</option>
+                                    <option value="project">Project</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Tracking Method</label>
+                                <select required>
+                                    <option value="">Select Method</option>
+                                    <option value="percentage">Percentage</option>
+                                    <option value="absolute">Absolute Value</option>
+                                    <option value="binary">Yes/No</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Target Value</label>
+                                <input type="text" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Target Year</label>
+                                <input type="number" min="2025" max="2050" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-full">Add Target</button>
+                        </form>
+                    `;
+                    break;
+                case 'add-task':
+                    title.textContent = 'Add Task';
+                    drawerContent = `
+                        <form id="taskForm">
+                            <div class="form-group">
+                                <label>Task Name</label>
+                                <input type="text" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Assigned To</label>
+                                <input type="text" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Due Date</label>
+                                <input type="date" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Recurring</label>
+                                <select>
+                                    <option value="no">No</option>
+                                    <option value="daily">Daily</option>
+                                    <option value="weekly">Weekly</option>
+                                    <option value="monthly">Monthly</option>
+                                    <option value="quarterly">Quarterly</option>
+                                    <option value="annually">Annually</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select required>
+                                    <option value="">Select Status</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="in-progress">In Progress</option>
+                                    <option value="completed">Completed</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-full">Add Task</button>
+                        </form>
+                    `;
+                    break;
+            }
+            
+            content.innerHTML = drawerContent;
+            overlay.classList.add('active');
+            drawer.classList.add('open');
+        }
+
+        function closeSlideDrawer() {
+            const drawer = document.getElementById('slideDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+            
+            overlay.classList.remove('active');
+            drawer.classList.remove('open');
+        }
+
+        // Action Functions
+        function saveStandards() {
+            alert('Standards selection saved successfully!');
+        }
+
+        function saveParameters() {
+            localStorage.setItem('selectedParameters', JSON.stringify(selectedParameters));
+            alert('Parameter selection saved successfully!');
+        }
+
+        function saveBaseline() {
+            alert('Baseline data saved successfully!');
+        }
+
+        function saveGoals() {
+            localStorage.setItem('goals', JSON.stringify(goals));
+            alert('Goals saved successfully!');
+        }
+
+        function uploadData() {
+            const fileInput = document.getElementById('dataUpload');
+            const message = document.getElementById('uploadMessage');
+            
+            if (fileInput.files.length > 0) {
+                message.innerHTML = '<div style="color: #28A745; font-weight: 500;">✓ Data uploaded successfully!</div>';
+                message.style.display = 'block';
+            } else {
+                message.innerHTML = '<div style="color: #DC3545; font-weight: 500;">✗ Please select a file to upload.</div>';
+                message.style.display = 'block';
+            }
+        }
+
+        function exportParameters() {
+            const csvContent = "data:text/csv;charset=utf-8," + 
+                "Category,Parameter Name,Scope,Unit,Type\n" +
+                selectedParameters.map(p => `${p.category || 'General'},${p.name},${p.scope},${p.unit},${p.mandatory ? 'Mandatory' : 'Voluntary'}`).join('\n');
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "selected_parameters.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            closeSlideDrawer();
+        }
+
+        function exportDashboard() {
+            alert('Dashboard exported successfully! Download will begin shortly.');
+        }
+
+        function generateReport() {
+            alert('Report generation started! This may take a few minutes.');
+            setTimeout(() => {
+                document.getElementById('reportPreview').style.display = 'block';
+                document.getElementById('previewContent').innerHTML = `
+                    <div style="padding: 20px; background-color: #F8F9FA; border-radius: 8px;">
+                        <h3>BRSR Report Preview</h3>
+                        <p>This is a preview of your generated BRSR report. The full report contains all the information you've provided across the different sections.</p>
+                        <p><strong>Report Date:</strong> ${new Date().toLocaleDateString()}</p>
+                        <p><strong>Completion Status:</strong> 85% Complete</p>
+                        <p><strong>Total Pages:</strong> 45</p>
+                    </div>
+                `;
+            }, 2000);
+        }
+
+        function previewReport() {
+            generateReport();
+        }
+
+        function downloadReport(format) {
+            alert(`${format.toUpperCase()} report download started! File will be available shortly.`);
+        }
+
+        // Initialize page on load
+        window.addEventListener('load', function() {
+            // Any additional initialization can go here
+        });
+    </script>
+</body>
+</html>

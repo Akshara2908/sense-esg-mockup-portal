@@ -908,51 +908,76 @@
             </div>
 
             <!-- Goals Overview -->
-            <div class="grid grid-2">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">Environmental Goals</div>
-                    </div>
-                    <div class="goal-item" data-goal="reduce-energy" style="margin-bottom: 20px; cursor: pointer;" onclick="navigateToGoal('Environmental', 'reduce-energy')">
-                        <div class="flex justify-between align-center mb-10">
-                            <span style="color: #28A745; text-decoration: underline;">Reduce Energy Use</span>
-                            <span style="font-weight: 600;">75%</span>
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Goals Overview</div>
+                    <div class="card-subtitle">All ESG goals across Environmental, Social, and Governance categories</div>
+                </div>
+                
+                <div class="grid grid-2" style="gap: 15px;">
+                    <div class="goal-item" data-goal="reduce-energy" style="cursor: pointer; padding: 15px; border: 1px solid #DEE2E6; border-radius: 8px;" onclick="navigateToGoal('Environmental', 'reduce-energy')">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <span style="color: #28A745; text-decoration: underline; font-weight: 500;">Reduce Energy Use</span>
+                            <span style="font-weight: 600; color: #333;">75%</span>
                         </div>
+                        <div style="font-size: 12px; color: #6C757D; margin-bottom: 8px;">Environmental</div>
                         <div class="progress">
                             <div class="progress-bar" style="width: 75%;"></div>
                         </div>
                     </div>
-                    <div class="goal-item" data-goal="water-efficiency" style="margin-bottom: 20px; cursor: pointer;" onclick="navigateToGoal('Environmental', 'water-efficiency')">
-                        <div class="flex justify-between align-center mb-10">
-                            <span style="color: #28A745; text-decoration: underline;">Improve Water Efficiency</span>
-                            <span style="font-weight: 600;">85%</span>
+                    
+                    <div class="goal-item" data-goal="water-efficiency" style="cursor: pointer; padding: 15px; border: 1px solid #DEE2E6; border-radius: 8px;" onclick="navigateToGoal('Environmental', 'water-efficiency')">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <span style="color: #28A745; text-decoration: underline; font-weight: 500;">Improve Water Efficiency</span>
+                            <span style="font-weight: 600; color: #333;">85%</span>
                         </div>
+                        <div style="font-size: 12px; color: #6C757D; margin-bottom: 8px;">Environmental</div>
                         <div class="progress">
                             <div class="progress-bar" style="width: 85%;"></div>
                         </div>
                     </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">Social Goals</div>
-                    </div>
-                    <div class="goal-item" style="margin-bottom: 20px; cursor: pointer;" onclick="navigateToGoal('Social', 'employee-wellness')">
-                        <div class="flex justify-between align-center mb-10">
-                            <span style="color: #28A745; text-decoration: underline;">Enhance Employee Wellness</span>
-                            <span style="font-weight: 600;">60%</span>
+                    
+                    <div class="goal-item" style="cursor: pointer; padding: 15px; border: 1px solid #DEE2E6; border-radius: 8px;" onclick="navigateToGoal('Social', 'employee-wellness')">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <span style="color: #28A745; text-decoration: underline; font-weight: 500;">Enhance Employee Wellness</span>
+                            <span style="font-weight: 600; color: #333;">60%</span>
                         </div>
+                        <div style="font-size: 12px; color: #6C757D; margin-bottom: 8px;">Social</div>
                         <div class="progress">
                             <div class="progress-bar" style="width: 60%;"></div>
                         </div>
                     </div>
-                    <div class="goal-item" style="margin-bottom: 20px; cursor: pointer;" onclick="navigateToGoal('Social', 'diversity')">
-                        <div class="flex justify-between align-center mb-10">
-                            <span style="color: #28A745; text-decoration: underline;">Improve Diversity</span>
-                            <span style="font-weight: 600;">45%</span>
+                    
+                    <div class="goal-item" style="cursor: pointer; padding: 15px; border: 1px solid #DEE2E6; border-radius: 8px;" onclick="navigateToGoal('Social', 'diversity')">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <span style="color: #28A745; text-decoration: underline; font-weight: 500;">Improve Diversity</span>
+                            <span style="font-weight: 600; color: #333;">45%</span>
                         </div>
+                        <div style="font-size: 12px; color: #6C757D; margin-bottom: 8px;">Social</div>
                         <div class="progress">
                             <div class="progress-bar warning" style="width: 45%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="goal-item" style="cursor: pointer; padding: 15px; border: 1px solid #DEE2E6; border-radius: 8px;" onclick="navigateToGoal('Governance', 'board-diversity')">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <span style="color: #28A745; text-decoration: underline; font-weight: 500;">Board Diversity</span>
+                            <span style="font-weight: 600; color: #333;">70%</span>
+                        </div>
+                        <div style="font-size: 12px; color: #6C757D; margin-bottom: 8px;">Governance</div>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 70%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="goal-item" style="cursor: pointer; padding: 15px; border: 1px solid #DEE2E6; border-radius: 8px;" onclick="navigateToGoal('Governance', 'compliance')">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <span style="color: #28A745; text-decoration: underline; font-weight: 500;">Compliance Management</span>
+                            <span style="font-weight: 600; color: #333;">90%</span>
+                        </div>
+                        <div style="font-size: 12px; color: #6C757D; margin-bottom: 8px;">Governance</div>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 90%;"></div>
                         </div>
                     </div>
                 </div>
@@ -1198,19 +1223,110 @@
         <div class="page" id="goals">
             <h1 style="margin-bottom: 30px; color: #333333; font-weight: 600;">Goal Setting</h1>
             
+            <!-- Add Goal Form -->
+            <div class="card" style="margin-bottom: 30px;">
+                <div class="card-header">
+                    <div class="card-title">Add New Goal</div>
+                    <div class="card-subtitle">Create custom goals or select from templates</div>
+                </div>
+                
+                <div class="grid grid-2" style="gap: 20px;">
+                    <div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="customGoal" onchange="toggleCustomGoal()"> Add Custom Goal
+                            </label>
+                        </div>
+                        
+                        <div class="form-group" id="templateSection">
+                            <label>Choose Template</label>
+                            <select id="goalTemplate" onchange="updateGoalDescription()">
+                                <option value="">Select a template</option>
+                                <option value="Reduce Energy Consumption">Reduce Energy Consumption</option>
+                                <option value="Improve Water Efficiency">Improve Water Efficiency</option>
+                                <option value="Enhance Employee Wellness">Enhance Employee Wellness</option>
+                                <option value="Board Diversity">Board Diversity</option>
+                                <option value="Compliance Management">Compliance Management</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group" id="customSection" style="display: none;">
+                            <label>Goal Name</label>
+                            <input type="text" id="goalName" placeholder="Enter goal name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select id="goalCategory">
+                                <option value="Environmental">Environmental</option>
+                                <option value="Social">Social</option>
+                                <option value="Governance">Governance</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="goalDescription" rows="3" placeholder="Enter description"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Target Value</label>
+                            <input type="text" id="goalTarget" placeholder="e.g., 25% reduction">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Target Date</label>
+                            <input type="date" id="goalDate">
+                        </div>
+                        
+                        <button class="btn btn-primary" onclick="addGoalInline()" style="width: 100%; margin-top: 10px;">
+                            <span class="material-icons" style="font-size: 16px; margin-right: 5px;">add</span>
+                            Add Goal
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Existing Goals -->
             <div class="card">
                 <div class="card-header">
-                    <div class="flex justify-between align-center">
-                        <div>
-                            <div class="card-title">Set ESG Goals</div>
-                            <div class="card-subtitle">Define goals for your selected categories</div>
-                        </div>
-                        <button class="btn btn-primary" onclick="openGoalForm()" style="position: fixed; bottom: 30px; right: 30px; border-radius: 50%; width: 60px; height: 60px; font-size: 24px; z-index: 100;">+</button>
-                    </div>
+                    <div class="card-title">Current Goals</div>
+                    <div class="card-subtitle">Manage your existing ESG goals</div>
                 </div>
 
                 <div id="goalsList">
                     <!-- Dynamic goals will be displayed here -->
+                    <div class="goal-item" style="border: 1px solid #DEE2E6; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 600; margin-bottom: 5px;">Reduce Energy Consumption</div>
+                                <div style="font-size: 14px; color: #6C757D;">Environmental • Target: 25% reduction by 2025</div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-weight: 600;">75%</span>
+                                <div class="progress" style="width: 100px;">
+                                    <div class="progress-bar" style="width: 75%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="goal-item" style="border: 1px solid #DEE2E6; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 600; margin-bottom: 5px;">Enhance Employee Wellness</div>
+                                <div style="font-size: 14px; color: #6C757D;">Social • Target: 90% satisfaction by 2025</div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-weight: 600;">60%</span>
+                                <div class="progress" style="width: 100px;">
+                                    <div class="progress-bar" style="width: 60%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="navigation-buttons">
@@ -1676,8 +1792,10 @@
                 case 'parameters':
                 case 'goals':
                 case 'implementation':
-                case 'monitoring':
                     sidebarContent.innerHTML = generateCategorySidebar();
+                    break;
+                case 'monitoring':
+                    sidebarContent.innerHTML = generateMonitoringSidebar();
                     break;
                 case 'reporting':
                     sidebarContent.innerHTML = generateReportingSidebar();
@@ -1710,6 +1828,26 @@
                                 ${capitalizeFirst(sub)}
                             </div>
                         `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function generateMonitoringSidebar() {
+            const categories = [
+                { name: 'Environmental', icon: '🌱' },
+                { name: 'Social', icon: '👥' },
+                { name: 'Governance', icon: '⚖️' }
+            ];
+
+            return categories.map(category => `
+                <div class="sidebar-category">
+                    <div class="sidebar-category-title ${currentMonitoringCategory === category.name ? 'active' : ''}" 
+                         onclick="selectMonitoringCategory('${category.name}')">
+                        <div style="display: flex; align-items: center;">
+                            <span class="sidebar-category-icon">${category.icon}</span>
+                            ${category.name}
+                        </div>
                     </div>
                 </div>
             `).join('');
@@ -1978,11 +2116,21 @@
                 implementationHTML += `
                     <div class="expandable">
                         <div class="expandable-header" onclick="toggleImplementationSection(this)">
-                            <div class="flex align-center gap-10">
-                                <span style="font-weight: 600;">${goal.name}</span>
-                                <span class="badge badge-in-progress">Active</span>
+                            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                <div class="flex align-center gap-10">
+                                    <span style="font-weight: 600;">${goal.name}</span>
+                                    <span class="badge badge-in-progress">Active</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <span style="font-weight: 600; font-size: 14px;">${goal.progress || '75'}%</span>
+                                        <div class="progress" style="width: 120px;">
+                                            <div class="progress-bar" style="width: ${goal.progress || '75'}%;"></div>
+                                        </div>
+                                    </div>
+                                    <span class="material-icons">expand_more</span>
+                                </div>
                             </div>
-                            <span class="material-icons">expand_more</span>
                         </div>
                         <div class="expandable-content">
                             <div class="expandable-content-inner">
@@ -2638,6 +2786,68 @@ Biodiversity Impact,Voluntary,GRI`;
             } else if (format === 'pdf') {
                 alert('Parameters exported as PDF successfully!');
             }
+        }
+
+        function selectMonitoringCategory(category) {
+            currentMonitoringCategory = category;
+            loadMonitoringContent();
+            updateMonitoringCharts(category);
+            
+            // Update sidebar active states
+            document.querySelectorAll('.sidebar-category-title').forEach(title => {
+                title.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function addGoalInline() {
+            const customGoal = document.getElementById('customGoal').checked;
+            const goalName = customGoal ? 
+                document.getElementById('goalName').value : 
+                document.getElementById('goalTemplate').value;
+            const category = document.getElementById('goalCategory').value;
+            const description = document.getElementById('goalDescription').value;
+            const target = document.getElementById('goalTarget').value;
+            const date = document.getElementById('goalDate').value;
+
+            if (!goalName || !description) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            // Add goal to the goals list
+            const goalsList = document.getElementById('goalsList');
+            const newGoal = document.createElement('div');
+            newGoal.className = 'goal-item';
+            newGoal.style.cssText = 'border: 1px solid #DEE2E6; border-radius: 8px; padding: 15px; margin-bottom: 15px;';
+            
+            newGoal.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-weight: 600; margin-bottom: 5px;">${goalName}</div>
+                        <div style="font-size: 14px; color: #6C757D;">${category} • Target: ${target} by ${date}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-weight: 600;">0%</span>
+                        <div class="progress" style="width: 100px;">
+                            <div class="progress-bar" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            goalsList.appendChild(newGoal);
+
+            // Clear form
+            document.getElementById('goalTemplate').value = '';
+            document.getElementById('goalName').value = '';
+            document.getElementById('goalDescription').value = '';
+            document.getElementById('goalTarget').value = '';
+            document.getElementById('goalDate').value = '';
+            document.getElementById('customGoal').checked = false;
+            toggleCustomGoal();
+
+            alert('Goal added successfully!');
         }
 
         function logout() {

@@ -10,10 +10,8 @@ interface User {
 
 interface OrganizationData {
   name: string;
-  industry: string;
-  size: string;
   location: string;
-  description: string;
+  employees: string;
 }
 
 const Index = () => {

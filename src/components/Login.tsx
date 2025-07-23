@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 
 interface LoginProps {
@@ -9,7 +9,7 @@ interface LoginProps {
 }
 
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -19,56 +19,65 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     
     // Simulate API call
     setTimeout(() => {
-      onLogin({ email, password });
+      onLogin({ email: username, password });
       setIsLoading(false);
     }, 1000);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-blue-50 p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="flex items-center justify-center mb-4">
-            <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">🌱</span>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+      <Card className="w-full max-w-md shadow-lg">
+        <CardHeader className="text-center pb-6">
+          <div className="flex items-center justify-center mb-6">
+            <div className="w-8 h-8 mr-2">
+              <span className="text-2xl">🌱</span>
             </div>
-            <span className="ml-3 text-2xl font-bold text-gray-900">Helix Sense</span>
+            <span className="text-3xl font-bold text-green-600">Helix Sense</span>
           </div>
-          <CardTitle className="text-2xl">Welcome Back</CardTitle>
-          <CardDescription>
-            Sign in to your ESG management portal
-          </CardDescription>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+        <CardContent className="px-8 pb-8">
+          {/* Credential hint */}
+          <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-6 text-center">
+            <p className="text-sm text-green-700">Use: admin / password123</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="username" className="text-base font-medium text-gray-700">
+                Username
+              </Label>
               <Input
-                id="email"
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                id="username"
+                type="text"
+                placeholder="admin"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="h-12 text-base"
                 required
               />
             </div>
+            
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-base font-medium text-gray-700">
+                Password
+              </Label>
               <Input
                 id="password"
                 type="password"
-                placeholder="Enter your password"
+                placeholder="••••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                className="h-12 text-base"
                 required
               />
             </div>
+            
             <Button 
               type="submit" 
-              className="w-full bg-green-600 hover:bg-green-700"
+              className="w-full h-12 bg-green-600 hover:bg-green-700 text-white font-medium text-base"
               disabled={isLoading}
             >
-              {isLoading ? 'Signing in...' : 'Sign In'}
+              {isLoading ? 'Logging in...' : 'Login'}
             </Button>
           </form>
         </CardContent>

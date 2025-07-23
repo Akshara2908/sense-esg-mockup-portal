@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
 
 interface OrganizationData {
   name: string;
-  industry: string;
-  size: string;
   location: string;
-  description: string;
+  employees: string;
 }
 
 interface OrganizationDetailsProps {
@@ -21,10 +18,8 @@ interface OrganizationDetailsProps {
 const OrganizationDetails: React.FC<OrganizationDetailsProps> = ({ onComplete }) => {
   const [formData, setFormData] = useState<OrganizationData>({
     name: '',
-    industry: '',
-    size: '',
     location: '',
-    description: ''
+    employees: ''
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -44,91 +39,72 @@ const OrganizationDetails: React.FC<OrganizationDetailsProps> = ({ onComplete })
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-blue-50 p-4">
-      <Card className="w-full max-w-2xl">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Organization Details</CardTitle>
-          <CardDescription>
-            Please provide your organization information to set up your ESG portal
-          </CardDescription>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+      <Card className="w-full max-w-md shadow-lg">
+        <CardHeader className="text-center pb-6">
+          <CardTitle className="text-3xl font-bold text-green-600 mb-6">
+            Organization Setup
+          </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-8 pb-8">
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Organization Name *</Label>
-                <Input
-                  id="name"
-                  placeholder="Enter organization name"
-                  value={formData.name}
-                  onChange={(e) => handleInputChange('name', e.target.value)}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="industry">Industry *</Label>
-                <Select onValueChange={(value) => handleInputChange('industry', value)} required>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select industry" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="technology">Technology</SelectItem>
-                    <SelectItem value="manufacturing">Manufacturing</SelectItem>
-                    <SelectItem value="finance">Finance</SelectItem>
-                    <SelectItem value="healthcare">Healthcare</SelectItem>
-                    <SelectItem value="energy">Energy</SelectItem>
-                    <SelectItem value="retail">Retail</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="name" className="text-base font-medium text-gray-700">
+                Organization Name
+              </Label>
+              <Input
+                id="name"
+                placeholder="Enter organization name"
+                value={formData.name}
+                onChange={(e) => handleInputChange('name', e.target.value)}
+                className="h-12 text-base"
+                required
+              />
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="size">Organization Size *</Label>
-                <Select onValueChange={(value) => handleInputChange('size', value)} required>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select size" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="startup">Startup (1-10 employees)</SelectItem>
-                    <SelectItem value="small">Small (11-50 employees)</SelectItem>
-                    <SelectItem value="medium">Medium (51-200 employees)</SelectItem>
-                    <SelectItem value="large">Large (201-1000 employees)</SelectItem>
-                    <SelectItem value="enterprise">Enterprise (1000+ employees)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="location">Location *</Label>
-                <Input
-                  id="location"
-                  placeholder="Enter location"
-                  value={formData.location}
-                  onChange={(e) => handleInputChange('location', e.target.value)}
-                  required
-                />
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="location" className="text-base font-medium text-gray-700">
+                Location
+              </Label>
+              <Select onValueChange={(value) => handleInputChange('location', value)} required>
+                <SelectTrigger className="h-12 text-base">
+                  <SelectValue placeholder="Select country" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="us">United States</SelectItem>
+                  <SelectItem value="uk">United Kingdom</SelectItem>
+                  <SelectItem value="ca">Canada</SelectItem>
+                  <SelectItem value="au">Australia</SelectItem>
+                  <SelectItem value="de">Germany</SelectItem>
+                  <SelectItem value="fr">France</SelectItem>
+                  <SelectItem value="in">India</SelectItem>
+                  <SelectItem value="jp">Japan</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
-              <Textarea
-                id="description"
-                placeholder="Brief description of your organization"
-                value={formData.description}
-                onChange={(e) => handleInputChange('description', e.target.value)}
-                rows={3}
+              <Label htmlFor="employees" className="text-base font-medium text-gray-700">
+                Number of Employees
+              </Label>
+              <Input
+                id="employees"
+                type="number"
+                placeholder="Enter number of employees"
+                value={formData.employees}
+                onChange={(e) => handleInputChange('employees', e.target.value)}
+                className="h-12 text-base"
+                required
               />
             </div>
 
             <Button 
               type="submit" 
-              className="w-full bg-green-600 hover:bg-green-700"
+              className="w-full h-12 bg-green-600 hover:bg-green-700 text-white font-medium text-base mt-8"
               disabled={isLoading}
             >
-              {isLoading ? 'Setting up...' : 'Complete Setup'}
+              {isLoading ? 'Setting up...' : 'Submit'}
             </Button>
           </form>
         </CardContent>

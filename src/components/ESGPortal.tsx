@@ -4,12 +4,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Separator } from '@/components/ui/separator';
 import { 
   Home, 
   ClipboardList, 
@@ -17,10 +11,7 @@ import {
   BarChart3, 
   FileText, 
   Brain,
-  LogOut,
-  Download,
-  Plus,
-  Trash2
+  LogOut
 } from 'lucide-react';
 
 interface User {
@@ -30,10 +21,8 @@ interface User {
 
 interface OrganizationData {
   name: string;
-  industry: string;
-  size: string;
   location: string;
-  description: string;
+  employees: string;
 }
 
 interface ESGPortalProps {
@@ -52,17 +41,11 @@ interface Goal {
   status: 'Active' | 'Completed' | 'Pending';
 }
 
-interface Parameter {
-  id: string;
-  name: string;
-  category: string;
-  mandatory: boolean;
-  selected: boolean;
-}
-
 const ESGPortal: React.FC<ESGPortalProps> = ({ user, organization, onLogout }) => {
   const [activeTab, setActiveTab] = useState('home');
-  const [goals, setGoals] = useState<Goal[]>([
+  const [selectedGoalId, setSelectedGoalId] = useState<string | null>(null);
+  
+  const [goals] = useState<Goal[]>([
     {
       id: '1',
       title: 'Reduce Carbon Emissions',
@@ -92,74 +75,15 @@ const ESGPortal: React.FC<ESGPortalProps> = ({ user, organization, onLogout }) =
     }
   ]);
 
-  const [parameters, setParameters] = useState<Parameter[]>([
-    { id: '1', name: 'GHG Emissions Scope 1', category: 'Environmental', mandatory: true, selected: true },
-    { id: '2', name: 'GHG Emissions Scope 2', category: 'Environmental', mandatory: true, selected: true },
-    { id: '3', name: 'Water Consumption', category: 'Environmental', mandatory: false, selected: false },
-    { id: '4', name: 'Employee Turnover Rate', category: 'Social', mandatory: true, selected: true },
-    { id: '5', name: 'Gender Pay Gap', category: 'Social', mandatory: false, selected: true },
-    { id: '6', name: 'Board Diversity', category: 'Governance', mandatory: true, selected: true },
-  ]);
-
-  const [newGoal, setNewGoal] = useState({
-    title: '',
-    category: '' as 'Environmental' | 'Social' | 'Governance',
-    target: '',
-    deadline: ''
-  });
-
-  const [showSelectedOnly, setShowSelectedOnly] = useState(false);
-
-  const handleParameterToggle = (id: string) => {
-    setParameters(prev => 
-      prev.map(param => 
-        param.id === id ? { ...param, selected: !param.selected } : param
-      )
-    );
-  };
-
-  const handleAddGoal = () => {
-    if (newGoal.title && newGoal.category && newGoal.target && newGoal.deadline) {
-      const goal: Goal = {
-        id: Date.now().toString(),
-        title: newGoal.title,
-        category: newGoal.category,
-        progress: 0,
-        target: newGoal.target,
-        deadline: newGoal.deadline,
-        status: 'Active'
-      };
-      setGoals(prev => [...prev, goal]);
-      setNewGoal({ title: '', category: '' as any, target: '', deadline: '' });
-    }
-  };
-
-  const handleDeleteGoal = (id: string) => {
-    setGoals(prev => prev.filter(goal => goal.id !== id));
-  };
-
-  const exportSelectedParameters = () => {
-    const selectedParams = parameters.filter(p => p.selected);
-    const csvContent = [
-      ['Parameter Name', 'Category', 'Type'],
-      ...selectedParams.map(p => [p.name, p.category, p.mandatory ? 'Mandatory' : 'Voluntary'])
-    ].map(row => row.join(',')).join('\n');
-    
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'selected-esg-parameters.csv';
-    a.click();
-    window.URL.revokeObjectURL(url);
-  };
-
   const activeGoals = goals.filter(g => g.status === 'Active').length;
-  const initiatives = 8; // Mock data
-  const activeTasks = 24; // Mock data
+  const initiatives = 8;
+  const activeTasks = 24;
   const overallPerformance = Math.round(goals.reduce((acc, goal) => acc + goal.progress, 0) / goals.length);
 
-  const displayedParameters = showSelectedOnly ? parameters.filter(p => p.selected) : parameters;
+  const handleGoalClick = (goalId: string) => {
+    setSelectedGoalId(goalId);
+    setActiveTab('implementation');
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -305,10 +229,14 @@ const ESGPortal: React.FC<ESGPortalProps> = ({ user, organization, onLogout }) =
                   <CardContent>
                     <div className="space-y-6">
                       {goals.map((goal) => (
-                        <div key={goal.id} className="flex items-center justify-between p-4 border rounded-lg">
+                        <div 
+                          key={goal.id} 
+                          className="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                          onClick={() => handleGoalClick(goal.id)}
+                        >
                           <div className="flex-1">
                             <div className="flex items-center space-x-3 mb-2">
-                              <h3 className="font-semibold">{goal.title}</h3>
+                              <h3 className="font-semibold text-blue-600 hover:text-blue-800">{goal.title}</h3>
                               <Badge variant={goal.category === 'Environmental' ? 'default' : goal.category === 'Social' ? 'secondary' : 'outline'}>
                                 {goal.category}
                               </Badge>
@@ -330,160 +258,19 @@ const ESGPortal: React.FC<ESGPortalProps> = ({ user, organization, onLogout }) =
             {/* Planning Tab */}
             <TabsContent value="planning" className="mt-6">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
-                <Tabs defaultValue="parameters" className="w-full">
-                  <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="parameters">Select Parameters</TabsTrigger>
-                    <TabsTrigger value="goals">Goal Setting</TabsTrigger>
-                  </TabsList>
-
-                  <TabsContent value="parameters" className="mt-6">
-                    <Card>
-                      <CardHeader>
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <CardTitle>ESG Parameters Selection</CardTitle>
-                            <CardDescription>Choose mandatory and voluntary parameters for your ESG reporting</CardDescription>
-                          </div>
-                          <div className="flex space-x-2">
-                            <Button 
-                              variant="outline" 
-                              onClick={() => setShowSelectedOnly(!showSelectedOnly)}
-                            >
-                              {showSelectedOnly ? 'View All' : 'View Selected'}
-                            </Button>
-                            <Button onClick={exportSelectedParameters}>
-                              <Download className="w-4 h-4 mr-2" />
-                              Export CSV
-                            </Button>
-                          </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-4">
-                          {['Environmental', 'Social', 'Governance'].map(category => {
-                            const categoryParams = displayedParameters.filter(p => p.category === category);
-                            if (categoryParams.length === 0) return null;
-                            
-                            return (
-                              <div key={category}>
-                                <h3 className="font-semibold text-lg mb-3">{category}</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                  {categoryParams.map(param => (
-                                    <div key={param.id} className="flex items-center space-x-3 p-3 border rounded-lg">
-                                      <Checkbox
-                                        checked={param.selected}
-                                        onCheckedChange={() => handleParameterToggle(param.id)}
-                                        disabled={param.mandatory}
-                                      />
-                                      <div className="flex-1">
-                                        <p className="font-medium">{param.name}</p>
-                                        <Badge variant={param.mandatory ? 'default' : 'secondary'} className="text-xs">
-                                          {param.mandatory ? 'Mandatory' : 'Voluntary'}
-                                        </Badge>
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                                <Separator className="mt-4" />
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </TabsContent>
-
-                  <TabsContent value="goals" className="mt-6">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                      {/* Add Goal Form */}
-                      <Card>
-                        <CardHeader>
-                          <CardTitle>Add New Goal</CardTitle>
-                          <CardDescription>Create a new ESG goal for your organization</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                          <div>
-                            <Label htmlFor="goal-title">Goal Title</Label>
-                            <Input
-                              id="goal-title"
-                              placeholder="Enter goal title"
-                              value={newGoal.title}
-                              onChange={(e) => setNewGoal(prev => ({ ...prev, title: e.target.value }))}
-                            />
-                          </div>
-                          <div>
-                            <Label htmlFor="goal-category">Category</Label>
-                            <Select onValueChange={(value: any) => setNewGoal(prev => ({ ...prev, category: value }))}>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select category" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="Environmental">Environmental</SelectItem>
-                                <SelectItem value="Social">Social</SelectItem>
-                                <SelectItem value="Governance">Governance</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-                          <div>
-                            <Label htmlFor="goal-target">Target</Label>
-                            <Textarea
-                              id="goal-target"
-                              placeholder="Describe the target outcome"
-                              value={newGoal.target}
-                              onChange={(e) => setNewGoal(prev => ({ ...prev, target: e.target.value }))}
-                            />
-                          </div>
-                          <div>
-                            <Label htmlFor="goal-deadline">Deadline</Label>
-                            <Input
-                              id="goal-deadline"
-                              type="date"
-                              value={newGoal.deadline}
-                              onChange={(e) => setNewGoal(prev => ({ ...prev, deadline: e.target.value }))}
-                            />
-                          </div>
-                          <Button onClick={handleAddGoal} className="w-full">
-                            <Plus className="w-4 h-4 mr-2" />
-                            Add Goal
-                          </Button>
-                        </CardContent>
-                      </Card>
-
-                      {/* Existing Goals */}
-                      <Card>
-                        <CardHeader>
-                          <CardTitle>Current Goals</CardTitle>
-                          <CardDescription>Manage your existing ESG goals</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-4">
-                            {goals.map(goal => (
-                              <div key={goal.id} className="p-4 border rounded-lg">
-                                <div className="flex justify-between items-start mb-2">
-                                  <h4 className="font-semibold">{goal.title}</h4>
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => handleDeleteGoal(goal.id)}
-                                    className="text-red-600 hover:text-red-700"
-                                  >
-                                    <Trash2 className="w-4 h-4" />
-                                  </Button>
-                                </div>
-                                <Badge variant="outline" className="mb-2">{goal.category}</Badge>
-                                <p className="text-sm text-gray-600 mb-2">{goal.target}</p>
-                                <div className="flex items-center space-x-2">
-                                  <Progress value={goal.progress} className="flex-1" />
-                                  <span className="text-sm">{goal.progress}%</span>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </CardContent>
-                      </Card>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Planning Dashboard</CardTitle>
+                    <CardDescription>Plan and organize your ESG initiatives</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-center py-12">
+                      <ClipboardList className="w-16 h-16 mx-auto text-gray-400 mb-4" />
+                      <h3 className="text-lg font-semibold mb-2">Planning Tools</h3>
+                      <p className="text-gray-600">Access planning tools and resources here.</p>
                     </div>
-                  </TabsContent>
-                </Tabs>
+                  </CardContent>
+                </Card>
               </div>
             </TabsContent>
 
@@ -498,7 +285,12 @@ const ESGPortal: React.FC<ESGPortalProps> = ({ user, organization, onLogout }) =
                   <CardContent>
                     <div className="space-y-6">
                       {goals.map(goal => (
-                        <div key={goal.id} className="flex items-center justify-between p-6 border rounded-lg">
+                        <div 
+                          key={goal.id} 
+                          className={`flex items-center justify-between p-6 border rounded-lg ${
+                            selectedGoalId === goal.id ? 'border-green-500 bg-green-50' : ''
+                          }`}
+                        >
                           <div className="flex-1 mr-6">
                             <div className="flex items-center space-x-3 mb-2">
                               <h3 className="font-semibold text-lg">{goal.title}</h3>
@@ -527,57 +319,19 @@ const ESGPortal: React.FC<ESGPortalProps> = ({ user, organization, onLogout }) =
             {/* Monitoring Tab */}
             <TabsContent value="monitoring" className="mt-6">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                  {/* Sidebar */}
-                  <div className="lg:col-span-1">
-                    <Card>
-                      <CardHeader>
-                        <CardTitle>ESG Categories</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-2">
-                          <Button variant="ghost" className="w-full justify-start">
-                            Environmental
-                          </Button>
-                          <Button variant="ghost" className="w-full justify-start">
-                            Social
-                          </Button>
-                          <Button variant="ghost" className="w-full justify-start">
-                            Governance
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-
-                  {/* Main Content */}
-                  <div className="lg:col-span-3">
-                    <Card>
-                      <CardHeader>
-                        <CardTitle>Monitoring Dashboard</CardTitle>
-                        <CardDescription>Real-time monitoring of ESG metrics and performance</CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          {goals.map(goal => (
-                            <div key={goal.id} className="p-4 border rounded-lg">
-                              <h4 className="font-semibold mb-2">{goal.title}</h4>
-                              <Badge variant="outline" className="mb-3">{goal.category}</Badge>
-                              <div className="space-y-2">
-                                <div className="flex justify-between text-sm">
-                                  <span>Current Progress</span>
-                                  <span>{goal.progress}%</span>
-                                </div>
-                                <Progress value={goal.progress} />
-                                <p className="text-xs text-gray-500 mt-2">{goal.target}</p>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </div>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Monitoring Dashboard</CardTitle>
+                    <CardDescription>Monitor your ESG performance and metrics</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-center py-12">
+                      <BarChart3 className="w-16 h-16 mx-auto text-gray-400 mb-4" />
+                      <h3 className="text-lg font-semibold mb-2">Monitoring Tools</h3>
+                      <p className="text-gray-600">Access monitoring dashboards and analytics here.</p>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             </TabsContent>
 

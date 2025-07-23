@@ -783,7 +783,10 @@
             </div>
             <div style="display: flex; align-items: center; gap: 15px;">
                 <span>Welcome, Admin</span>
-                <span class="material-icons" style="cursor: pointer;">account_circle</span>
+                <button class="btn" style="background: rgba(255,255,255,0.2); color: white; padding: 6px 12px; font-size: 12px;" onclick="logout()">
+                    <span class="material-icons" style="font-size: 16px; margin-right: 4px;">logout</span>
+                    Logout
+                </button>
             </div>
         </div>
         <div class="nav-tabs" id="navTabs">
@@ -1495,12 +1498,27 @@
             hasCompletedOrganization = localStorage.getItem('hasCompletedOrganization') === 'true';
 
             if (hasLoggedIn && hasCompletedOrganization) {
+                showMainApp();
                 showPage('home');
             } else if (hasLoggedIn && !hasCompletedOrganization) {
+                hideMainApp();
                 showPage('organization');
             } else {
+                hideMainApp();
                 showPage('login');
             }
+        }
+
+        function hideMainApp() {
+            document.querySelector('.navbar').style.display = 'none';
+            document.querySelector('.sidebar').style.display = 'none';
+            document.querySelector('#mainContent').style.marginTop = '0';
+            document.querySelector('#mainContent').classList.remove('with-sidebar');
+        }
+
+        function showMainApp() {
+            document.querySelector('.navbar').style.display = 'block';
+            document.querySelector('#mainContent').style.marginTop = '60px';
         }
 
         function setupEventListeners() {
@@ -1556,6 +1574,7 @@
             if (!hasCompletedOrganization) {
                 showPage('organization');
             } else {
+                showMainApp();
                 showPage('home');
             }
         }
@@ -1563,6 +1582,7 @@
         function handleOrganizationSubmission() {
             localStorage.setItem('hasCompletedOrganization', 'true');
             hasCompletedOrganization = true;
+            showMainApp();
             showPage('home');
         }
 
@@ -2318,7 +2338,61 @@
         }
 
         function showSelectedParameters() {
-            alert('Selected parameters viewer not implemented in mockup');
+            // Show modal with selected parameters
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                background: rgba(0,0,0,0.5); z-index: 1003; display: flex; 
+                justify-content: center; align-items: center;
+            `;
+            
+            const content = document.createElement('div');
+            content.style.cssText = `
+                background: white; padding: 30px; border-radius: 10px; 
+                max-width: 800px; max-height: 80vh; overflow-y: auto; width: 90%;
+            `;
+            
+            content.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="margin: 0; color: #333;">Selected Parameters</h2>
+                    <button onclick="this.closest('.modal').remove()" style="background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <h3 style="color: #DC3545; margin-bottom: 10px;">Mandatory Parameters</h3>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 15px;">
+                        <div style="margin-bottom: 8px;">• Energy Consumption (BRSR)</div>
+                        <div style="margin-bottom: 8px;">• Water Usage (BRSR)</div>
+                        <div style="margin-bottom: 8px;">• Waste Management (BRSR)</div>
+                        <div style="margin-bottom: 8px;">• GHG Emissions (BRSR)</div>
+                        <div style="margin-bottom: 8px;">• Employee Health & Safety (BRSR)</div>
+                        <div>• Board Diversity (BRSR)</div>
+                    </div>
+                    
+                    <h3 style="color: #007BFF; margin-bottom: 10px;">Voluntary Parameters</h3>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+                        <div style="margin-bottom: 8px;">• Renewable Energy Usage (GRI)</div>
+                        <div style="margin-bottom: 8px;">• Community Investment (GRI)</div>
+                        <div style="margin-bottom: 8px;">• Supply Chain Sustainability (GRI)</div>
+                        <div>• Biodiversity Impact (GRI)</div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-primary" onclick="exportSelectedParameters('csv')">
+                            <span class="material-icons" style="font-size: 16px; margin-right: 5px;">download</span>
+                            Export as CSV
+                        </button>
+                        <button class="btn btn-secondary" onclick="exportSelectedParameters('pdf')">
+                            <span class="material-icons" style="font-size: 16px; margin-right: 5px;">picture_as_pdf</span>
+                            Export as PDF
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            modal.className = 'modal';
+            modal.appendChild(content);
+            document.body.appendChild(modal);
         }
 
         function openGoalForm() {
@@ -2533,6 +2607,52 @@
             
             if (format && format >= 1 && format <= 3) {
                 alert(`Report downloaded as ${formats[format-1]} successfully!`);
+            }
+        }
+
+        function exportSelectedParameters(format) {
+            // Close the modal first
+            document.querySelector('.modal')?.remove();
+            
+            if (format === 'csv') {
+                const csvContent = `Parameter,Type,Standard
+Energy Consumption,Mandatory,BRSR
+Water Usage,Mandatory,BRSR
+Waste Management,Mandatory,BRSR
+GHG Emissions,Mandatory,BRSR
+Employee Health & Safety,Mandatory,BRSR
+Board Diversity,Mandatory,BRSR
+Renewable Energy Usage,Voluntary,GRI
+Community Investment,Voluntary,GRI
+Supply Chain Sustainability,Voluntary,GRI
+Biodiversity Impact,Voluntary,GRI`;
+                
+                const blob = new Blob([csvContent], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'selected_parameters.csv';
+                a.click();
+                window.URL.revokeObjectURL(url);
+                alert('Parameters exported as CSV successfully!');
+            } else if (format === 'pdf') {
+                alert('Parameters exported as PDF successfully!');
+            }
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                // Clear login state
+                localStorage.removeItem('hasLoggedIn');
+                localStorage.removeItem('hasCompletedOrganization');
+                hasLoggedIn = false;
+                hasCompletedOrganization = false;
+                
+                // Hide navbar and sidebar
+                hideMainApp();
+                
+                // Show login page
+                showPage('login');
             }
         }
 
